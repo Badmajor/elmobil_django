@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+  {% for post in posts %}
+    <hr>
+      <article>
+          <ul>
+            <li>
+              Название: {{ post.title }}
+            </li>
+            <li>
+              Дата: {{ post.date }}
+            </li>
+          </ul>
+          <p>
+            {{ post.text|truncatewords:10 }}
+          </p>
+          <a href="{% url 'blog:post' post.id %}">Читать полный текст</a>
+        </article>
+    {% endfor %}
+{% endblock %}
