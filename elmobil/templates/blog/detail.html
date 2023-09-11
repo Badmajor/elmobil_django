@@ -1,18 +1,25 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
-
 {% block content %}
-    <article>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <article>
         <h2>{{ post.title }}</h2>
-        <p class="post-meta">Опубликовано: {{ post.date }}</p>
-
-        <p class="post-meta">Автор: {{ post.author }}</p>
-
-        <div class="post-content">
-            <p>{{ post.text|safe }}</p>
-
+        <p class="text-muted">Опубликовано: {{ post.date }}</p>
+        <!-- Отображение изображения статьи -->
+        <img src="{% static 'img/img_posts/'|add:post.image_path %}"
+             alt="{{ article.title }}"
+             class="img-fluid">
+        <div class="mt-5">
+          {{ post.text|safe }}
         </div>
-    </article>
-
+      </article>
+    </div>
+    <div class="col-md-4">
+      {% include "includes/interesting.html" with posts=posts %}
+    </div>
+  </div>
+</div>
 {% endblock %}

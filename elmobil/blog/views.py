@@ -19,9 +19,11 @@ def post_detail(request, id: int):
         context = {'post': {'id': id,
                             'date': 'None',
                             'author': 'None',
+                            'image_path': '1.png',
                             'title': 'Еще не написали',
                             'text': 'Такого поста нет'
                             }}
+    context['posts'] = posts
     return render(request, template, context)
 
 
