@@ -1,6 +1,39 @@
-<header>
-  <h1>Заголовок сайта</h1>
-  <nav>
-    {% include "includes/menu.html" %}
+<header class="bg-success text-white">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'blog:index' %}">elmobil.ru</a>
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="nav  nav-pills">
+          {% with request.resolver_match.view_name as view_name %}
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'blog:index' %}active{% endif %}"
+              href="{% url 'blog:index' %}">
+                Лента записей
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'pages:about' %}active{% endif %}"
+              href="{% url 'pages:about' %}">
+                О проекте
+            </a>
+          </li>
+          {% endwith %}
+        </ul>
+      </div>
+      <form class="d-flex">
+        <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Найти</button>
+      </form>
+    </div>
   </nav>
 </header>
+

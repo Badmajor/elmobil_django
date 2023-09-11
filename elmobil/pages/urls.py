@@ -1,11 +1,11 @@
 from django.urls import path
 
-from elmobil.pages import views
+from . import views
 
 app_name = 'pages'
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('about', views.about, name='about')
 
 ]
 

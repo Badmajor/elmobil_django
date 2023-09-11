@@ -10,7 +10,7 @@
         <p class="post-meta">Автор: {{ post.author }}</p>
 
         <div class="post-content">
-            <p>{{ post.text }}</p>
+            <p>{{ post.text|safe }}</p>
 
         </div>
     </article>

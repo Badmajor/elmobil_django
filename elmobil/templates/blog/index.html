@@ -1,23 +1,22 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Главная страница{% endblock %}
-
 {% block content %}
   {% for post in posts %}
-    <hr>
-      <article>
-          <ul>
-            <li>
-              Название: {{ post.title }}
-            </li>
-            <li>
-              Дата: {{ post.date }}
-            </li>
-          </ul>
-          <p>
-            {{ post.text|truncatewords:10 }}
-          </p>
-          <a href="{% url 'blog:post' post.id %}">Читать полный текст</a>
-        </article>
-    {% endfor %}
+    <div class="container mt-4">
+      <div class="row">
+        <!-- Пост 1 -->
+        <div class="col-md-8">
+          <div class="card mb-5">
+            <img src="{% static 'img/logo.png' %}" class="card-img-top" alt="Изображение поста 1">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">{{ post.text|truncatewords:20 }}</p>
+              <a href="{% url 'blog:post' post.id %}" class="btn btn-dark">Читать далее</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
