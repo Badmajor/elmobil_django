@@ -7,7 +7,7 @@
           <div class="card-body">
             <h6 class="card-title">{{ post.title }}</h6>
             <p class="card-text">{{ post.text|truncatewords:10|striptags }}</p>
-            <a href="#" class="btn btn-primary">Читать далее</a>
+            <a href="{% url 'blog:post' post.id %}" class="btn btn-primary">Читать далее</a>
           </div>
         </div>
       </div>
