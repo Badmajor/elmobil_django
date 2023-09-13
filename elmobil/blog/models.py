@@ -23,8 +23,8 @@ class Tags(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=56)
-    post_url = models.URLField(default=title, max_length=75)
+    title = models.CharField(max_length=75)
+    post_slug = models.CharField(default=title, max_length=75)
     date_of_create = models.DateField(auto_now_add=True)
     date_of_change = models.DateField(auto_now=True)
     autor = models.ForeignKey(Autor, default='autor', on_delete=models.PROTECT)
