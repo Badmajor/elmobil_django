@@ -2,3 +2,4 @@ pip~=23.2.1
 Django==3.2.20
 flake8==5.0.4
 django-taggit==4.0.0
+gunicorn
