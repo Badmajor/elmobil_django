@@ -63,10 +63,10 @@ db.sqlite3-journal
 
 static/
 
-elmobil/settings.py
+elmobil/elmobil/settings.py
 
 
-# Flask stuff:
+# Flask stuff:git
 instance/
 .webassets-cache
 
