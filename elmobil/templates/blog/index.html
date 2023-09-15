@@ -9,7 +9,7 @@
           <div class="card mb-5">
             <img src="{% static 'img/img_posts/1.png' %}"
                  class="card-img-top"
-                 alt="Изображение поста 1"
+                 alt="{{ post.title }}"
                  style="max-width: 100%; height: auto;">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
@@ -21,5 +21,4 @@
       </div>
     </div>
   {% endfor %}
-  {% include "includes/paginator.html" with page=posts %}
 {% endblock %}
