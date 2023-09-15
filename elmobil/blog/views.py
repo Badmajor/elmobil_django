@@ -12,10 +12,10 @@ context = {
 
 def index(request):
     template = 'blog/index.html'
-    items = Post.objects.all().order_by('-date_of_create')
-    paginator = Paginator(items, 20)
+    posts = Post.objects.all().order_by('-date_of_create')
+    paginator = Paginator(posts, 20)
     page = paginator.get_page(1)
-    context['posts'] = page
+    context['posts'] = posts
     return render(request, template, context)
 
 
