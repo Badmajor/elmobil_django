@@ -12,7 +12,8 @@ posts = Post.objects.all()  # all Posts
 
 def index(request):
     template = 'blog/index.html'
-    context['posts'] = posts
+    context['posts'] = posts.order_by('-date_of_create')
+    print(context['posts'])
     return render(request, template, context)
 
 
