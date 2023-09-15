@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Главная страница{% endblock %}
+{% block title %}Главная страница - {{ TITLE_FROM_INDEX }} {% endblock %}
 {% block content %}
   {% for post in posts %}
     <div class="container mt-4">
