@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from .models import Post, Category
@@ -7,19 +8,20 @@ context = {
     'SITE_NAME': 'elmobil.ru',
     'TITLE_FROM_INDEX': 'Электромобили: преимущества, технологии и перспективы развития',
 }
-posts = Post.objects.all()  # all Posts
 
 
 def index(request):
     template = 'blog/index.html'
-    context['posts'] = posts.order_by('-date_of_create')
-    print(context['posts'])
+    items = Post.objects.all().order_by('-date_of_create')
+    paginator = Paginator(items, 20)
+    page = paginator.get_page(1)
+    context['posts'] = page
     return render(request, template, context)
 
 
 def post_detail(request, post_slug: str):
     template = 'blog/detail.html'
-    for post in posts:
+    for post in Post.objects.all():
         if post.post_slug == post_slug:
             context['post'] = post
             break
@@ -32,7 +34,7 @@ def post_detail(request, post_slug: str):
                            'text': 'Такого поста нет'
                            }
     context.update({
-        'posts': posts,
+        'posts': Post.objects.all(),
     })
     return render(request, template, context)
 

@@ -31,8 +31,9 @@ class Post(models.Model):
     text = models.TextField()
     views_count = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
-    category = models.ManyToManyField(Category)
-    tags = models.ManyToManyField(Tags)
+    category = models.ManyToManyField(Category, default=None)
+    tags = models.ManyToManyField(Tags, default=None)
 
     def __str__(self):
         return self.title
+
