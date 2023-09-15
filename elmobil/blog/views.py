@@ -12,7 +12,7 @@ context = {
 
 def index(request):
     template = 'blog/index.html'
-    posts = Post.objects.all().order_by('-date_of_create')
+    posts = Post.objects.all()
     paginator = Paginator(posts, 20)
     page = paginator.get_page(1)
     context['posts'] = posts
