@@ -60,6 +60,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+*.db
 
 elmobil/static/
 elmobil/static_dev/
@@ -158,3 +159,4 @@ media/
 build_tests/
 yap_testing
 html/img/img/
+my_scripts.py
