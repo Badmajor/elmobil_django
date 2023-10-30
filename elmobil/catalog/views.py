@@ -64,7 +64,7 @@ class CarDetailView(DetailView):
         #  добавляем изображения из папки static/catalog/<car_id>
         img_list = []
         try:
-            files = os.listdir(f'elmobil/static_dev/img/car_img/{self.object.pk}/')
+            files = os.listdir(f'elmobil/static/img/car_img/{self.object.pk}/')
             for file in files:
                 if 'jpg' in file:
                     img_list.append(file)
