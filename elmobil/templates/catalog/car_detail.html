@@ -36,7 +36,7 @@
             {% if img_list %}
               {% for img in img_list %}
                 <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                <img src="{% static 'img/car_img/' %}/{{car.pk }}/{{ img }}" class="d-block w-100" alt="{{ car.title }}">
+                <img src="{% static 'img/car_img/' %}{{car.pk }}/{{ img }}" class="d-block w-100" alt="{{ car.title }}">
                 </div>
               {% endfor %}
             {% endif %}

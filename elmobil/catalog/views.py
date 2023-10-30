@@ -71,7 +71,6 @@ class CarDetailView(DetailView):
         except FileNotFoundError:
             pass
         context['img_list'] = img_list  # список имен изображений
-        # Добавляем формы
         return context
 
 
