@@ -1,7 +1,7 @@
-from django.core.paginator import Paginator
+
 from django.shortcuts import render
 
-from .models import Post, Category
+from .models import Post
 
 # Context always has arguments SITE_NAME, TITLE_FROM_INDEX
 context = {

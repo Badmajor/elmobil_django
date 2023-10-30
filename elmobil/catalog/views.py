@@ -1,11 +1,13 @@
 import os
 
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from .constants import MAX_OBJ_ON_PAGE
 from .models import Car, Manufacturer
+
 
 
 class CarsListView(ListView):
@@ -64,7 +66,7 @@ class CarDetailView(DetailView):
         #  добавляем изображения из папки static/catalog/<car_id>
         img_list = []
         try:
-            files = os.listdir(f'elmobil/static/img/car_img/{self.object.pk}/')
+            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.object.pk}/')
             for file in files:
                 if 'jpg' in file:
                     img_list.append(file)
