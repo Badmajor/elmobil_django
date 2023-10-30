@@ -71,7 +71,7 @@ class CarDetailView(DetailView):
                 if 'jpg' in file:
                     img_list.append(file)
         except FileNotFoundError:
-            img_list.append('1_img.jpg')
+            pass
         context['img_list'] = img_list  # список имен изображений
         return context
 
