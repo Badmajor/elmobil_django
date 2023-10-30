@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Каталог электромобилей
+{% endblock %}
+{% block content %}
+  {% for car in page_obj %}
+    <article class="mb-5">
+      {% include "includes/car_card.html" %}
+    </article>
+  {% endfor %}
+  {% bootstrap_pagination page_obj %}
+{% endblock %}

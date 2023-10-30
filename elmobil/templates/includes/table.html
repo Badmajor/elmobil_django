@@ -1,0 +1,18 @@
+<table class="table table-striped table-hover">
+  <thead>
+  <th>
+    {% if name %}
+      {{ name }}
+    {% else %}
+      {{ data.get_verbose_name_plural }}
+    {% endif %}
+  </th>
+  </thead>
+  <tbody>
+    {% for field in data %}
+      <tr>
+        <td>{{ field }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

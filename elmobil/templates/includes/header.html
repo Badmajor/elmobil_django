@@ -21,6 +21,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link {% if view_name == 'catalog:car_list' %}active{% endif %}"
+              href="{% url 'catalog:car_list' %}">
+                Каталог электромобилей
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link {% if view_name == 'pages:about' %}active{% endif %}"
               href="{% url 'pages:about' %}">
                 О проекте

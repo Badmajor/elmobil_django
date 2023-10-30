@@ -1,0 +1,1 @@
+MAX_OBJ_ON_PAGE = 10

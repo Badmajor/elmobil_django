@@ -1,0 +1,23 @@
+<div class="col d-flex justify-content-center">
+  <div class="card" style="width: 40rem;">
+    <div class="card-body">
+      {% if car.image %}
+        <a href="{{ post.image.url }}" target="_blank">
+          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ post.image.url }}">
+        </a>
+      {% endif %}
+      <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.title|slugify %}">{{ car.title }}</a></h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        <small>
+          Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer %}">{{ car.manufacturer }}</a>
+        </small>
+      </h6>
+      {% if car.description %}
+        <p class="card-text">{{ car.description|truncatewords:10 }}</p>
+      {% endif %}
+      <p class="card-text">Максимальная скорость: {{ car.performance.top_speed }}</p>
+      <p class="card-text">Запас хода: {{ car.performance.electric_range }}</p>
+      <a href="{% url 'catalog:car_detail' car.id car.title|slugify %}" class="card-link">Подробнее</a>
+    </div>
+  </div>
+</div>

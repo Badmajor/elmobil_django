@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+  Электромобиль  {{ car.title }} | elmobil.ru
+{% endblock %}
+{% block content %}
+  <div class="col d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+      <div class="card-body">
+        {% if car.image %}
+          <a href="{{ car.image.url }}" target="_blank">
+            <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ car.image.url }}">
+          </a>
+        {% endif %}
+        <h5 class="card-title">{{ car.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <small>
+             Производитель {{ car.manufacturer }}
+          </small>
+        </h6>
+        <p class="card-text">{{ car.description|linebreaksbr }}</p>
+        {{ car.real_range_estimation.city_cold }}
+        <br>
+        {{ car.performance.acceleration_to_100 }}
+        <br>
+        {{ car }}
+        <br>
+        <br>
+        {{ car.view_count }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

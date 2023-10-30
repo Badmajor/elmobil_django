@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block title %}
+  Электромобиль  {{ car.title }} | elmobil.ru
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div id="title" class="row">
+      <div class="col-sm-9" >
+          <h1 class="h1-prod-name">{{ car.title }}</h1>
+          <h4 class="h4">
+            <small>
+               Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer %}">{{ car.manufacturer }}</a>
+            </small>
+          </h4>
+      </div>
+      <div class="col-sm-3">
+        {% if car.year_release %}
+          Старт продаж: {{ car.year_release }}
+        {% endif %}
+        {% if car.year_until %}
+          Cнят с производства: {{ car.year_until }}
+        {% endif %}
+      </div>
+    </div>
+    <div id="photo and performance" class="row">
+      <div class="col-md-6 m-4" id="carousel">
+        <div id="carouselexterier" class="carousel carousel-dark slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            {% for img in img_list %}
+              <button type="button" data-bs-target="#carouselexterier" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %}aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+          </div>
+          <div class="carousel-inner">
+            {% if img_list %}
+              {% for img in img_list %}
+                <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                <img src="{% static 'img/car_img/' %}/{{car.pk }}/{{ img }}" class="d-block w-100" alt="{{ car.title }}">
+                </div>
+              {% endfor %}
+            {% endif %}
+
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselexterier"  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предыдущий</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselexterier"  data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следующий</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4" id="performance">
+        {% if car.performance %}
+          {% include "includes/table.html" with data=car.performance %}
+        {% endif %}
+      </div>
+    </div>
+    <nav id="nav-tab">
+      <div class="nav nav-tabs"  role="tablist">
+        {% if car.description %}
+          <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Описание</button>
+        {% endif %}
+        {% if car.description %}
+          <button class="nav-link" id="real-range-tab" data-bs-toggle="tab" data-bs-target="#nav-real-range" type="button" role="tab" aria-controls="nav-real-range" aria-selected="false">{{ car.real_range_estimation.get_verbose_name_plural }}</button>
+        {% endif %}
+        <button class="nav-link" id="battery-tab" data-bs-toggle="tab" data-bs-target="#nav-battery" type="button" role="tab" aria-controls="nav-battery" aria-selected="false">{{ car.charging.get_verbose_name_plural }}</button>
+        <button class="nav-link" id="dimensions_weight-tab" data-bs-toggle="tab" data-bs-target="#nav-dimensions_weight" type="button" role="tab" aria-controls="nav-dimensions_weight" aria-selected="false">{{ car.dimensions_weight.get_verbose_name_plural }}</button>
+        {% if car.miscellaneous %}
+          <button class="nav-link" id="miscellaneous-tab" data-bs-toggle="tab" data-bs-target="#nav-miscellaneous" type="button" role="tab" aria-controls="nav-miscellaneous" aria-selected="false">{{ car.miscellaneous.get_verbose_name_plural }}</button>
+        {% endif %}
+      </div>
+    </nav>
+    <div id="nav-tabContent" class="tab-content" >
+      {% if car.description %}
+        <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="description-tab">
+          {{ car.description }}
+        </div>
+      {% endif %}
+      {% if car.description %}
+      <div class="tab-pane fade" id="nav-real-range" role="tabpanel" aria-labelledby="real-range-tab">
+        {% include "includes/table.html" with data=car.real_range_estimation %}
+      </div>
+      {% endif %}
+      <div class="tab-pane fade" id="nav-battery" role="tabpanel" aria-labelledby="battery-tab">
+        <div class="row">
+          <div class="col-md-4">
+            {% include "includes/table.html" with data=car.charging %}
+          </div>
+          {% if car.charging_fast %}
+            <div class="col-md-4">
+              {% include "includes/table.html" with data=car.charging_fast name='Быстрая зарядка' %}
+            </div>
+          {% endif %}
+          <div class="col-md-4">
+            {% include "includes/table.html" with data=car.battery %}
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-dimensions_weight" role="tabpanel" aria-labelledby="dimensions_weight-tab">
+        {% include "includes/table.html" with data=car.dimensions_weight %}
+      </div>
+      {% if car.miscellaneous %}
+      <div class="tab-pane fade" id="nav-miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
+        {% include "includes/table.html" with data=car.miscellaneous %}
+      </div>
+    {% endif %}
+    </div>
+  </div>
+{% endblock %}
