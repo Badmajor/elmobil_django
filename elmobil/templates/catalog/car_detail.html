@@ -63,7 +63,7 @@
         {% if car.description %}
           <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Описание</button>
         {% endif %}
-        {% if car.description %}
+        {% if car.real_range_estimation %}
           <button class="nav-link" id="real-range-tab" data-bs-toggle="tab" data-bs-target="#nav-real-range" type="button" role="tab" aria-controls="nav-real-range" aria-selected="false">{{ car.real_range_estimation.get_verbose_name_plural }}</button>
         {% endif %}
         <button class="nav-link" id="battery-tab" data-bs-toggle="tab" data-bs-target="#nav-battery" type="button" role="tab" aria-controls="nav-battery" aria-selected="false">{{ car.charging.get_verbose_name_plural }}</button>
@@ -79,7 +79,7 @@
           {{ car.description }}
         </div>
       {% endif %}
-      {% if car.description %}
+      {% if car.real_range_estimation %}
       <div class="tab-pane fade" id="nav-real-range" role="tabpanel" aria-labelledby="real-range-tab">
         {% include "includes/table.html" with data=car.real_range_estimation %}
       </div>
