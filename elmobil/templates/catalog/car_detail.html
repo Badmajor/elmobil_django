@@ -60,9 +60,7 @@
     </div>
     <nav id="nav-tab">
       <div class="nav nav-tabs"  role="tablist">
-        {% if car.description %}
-          <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Описание</button>
-        {% endif %}
+        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Описание</button>
         {% if car.real_range_estimation %}
           <button class="nav-link" id="real-range-tab" data-bs-toggle="tab" data-bs-target="#nav-real-range" type="button" role="tab" aria-controls="nav-real-range" aria-selected="false">{{ car.real_range_estimation.get_verbose_name_plural }}</button>
         {% endif %}
@@ -74,11 +72,14 @@
       </div>
     </nav>
     <div id="nav-tabContent" class="tab-content" >
-      {% if car.description %}
-        <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="description-tab">
+
+      <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="description-tab">
+        {% if car.description %}
           {{ car.description }}
-        </div>
-      {% endif %}
+        {% else %}
+          {% include "includes/car_title.html" %}
+        {% endif %}
+      </div>
       {% if car.real_range_estimation %}
       <div class="tab-pane fade" id="nav-real-range" role="tabpanel" aria-labelledby="real-range-tab">
         {% include "includes/table.html" with data=car.real_range_estimation %}
