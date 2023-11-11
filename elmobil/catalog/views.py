@@ -9,7 +9,6 @@ from .constants import MAX_OBJ_ON_PAGE
 from .models import Car, Manufacturer
 
 
-
 class CarsListView(ListView):
     model = Car
     paginate_by = MAX_OBJ_ON_PAGE
