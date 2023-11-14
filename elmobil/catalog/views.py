@@ -18,7 +18,9 @@ class CarsListView(ListView):
     def get_queryset(self):
         return self.model.objects.select_related(
             'manufacturer',
-            'performance',
+            'real_range_estimation',
+            'performance__acceleration_to_100',
+            'performance__drive',
         ).order_by('title')
 
 
@@ -60,20 +62,6 @@ class CarDetailView(DetailView):
         # car.increase_view_count() #  счетчик просмотров
         return car
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #  добавляем изображения из папки static/catalog/<car_id>
-        img_list = []
-        try:
-            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.object.pk}/')
-            for file in files:
-                if 'jpg' in file:
-                    img_list.append(file)
-        except FileNotFoundError:
-            pass
-        context['img_list'] = img_list  # список имен изображений
-        return context
-
 
 class ManufacturerDetailView(DetailView):
     model = Manufacturer
@@ -94,7 +82,3 @@ class ManufacturerDetailView(DetailView):
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
         return context
-
-
-
-

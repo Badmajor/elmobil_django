@@ -1,22 +1,47 @@
+{% load static %}
+{% load django_bootstrap5 %}
 <div class="col d-flex justify-content-center">
-  <div class="card" style="width: 40rem;">
+  <div class="card" style="width: 60rem;">
     <div class="card-body">
-      {% if car.image %}
-        <a href="{{ post.image.url }}" target="_blank">
-          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ post.image.url }}">
-        </a>
-      {% endif %}
       <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.title|slugify %}">{{ car.title }}</a></h5>
       <h6 class="card-subtitle mb-2 text-muted">
         <small>
           Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer %}">{{ car.manufacturer }}</a>
         </small>
       </h6>
-      {% if car.description %}
-        <p class="card-text">{{ car.description|truncatewords:10 }}</p>
-      {% endif %}
-      <p class="card-text">Максимальная скорость: {{ car.performance.top_speed }}</p>
-      <p class="card-text">Запас хода: {{ car.performance.electric_range }}</p>
+      <div id="photo and performance" class="row">
+      <div class="col-md-4 m-4" id="carousel">
+        <div id="carouselexterier-{{car.pk }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            {% for img in car.img_list %}
+              <button type="button" data-bs-target="#carouselexterier-{{car.pk }}" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %}aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+          </div>
+          <div class="carousel-inner">
+            {% if car.img_list %}
+              {% for img in car.img_list %}
+                <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                <img src="{% static 'img/car_img/' %}{{car.pk }}/{{ img }}" class="d-block w-100" alt="{{ car.title }}">
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselexterier-{{car.pk }}"  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предыдущий</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselexterier-{{car.pk }}"  data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следующий</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6" id="performance">
+        {% if car.performance %}
+          {% include "includes/table.html" with data=car.performance %}
+        {% endif %}
+      </div>
+    </div>
       <a href="{% url 'catalog:car_detail' car.id car.title|slugify %}" class="card-link">Подробнее</a>
     </div>
   </div>

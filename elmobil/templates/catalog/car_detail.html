@@ -28,19 +28,18 @@
       <div class="col-md-6 m-4" id="carousel">
         <div id="carouselexterier" class="carousel carousel-dark slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            {% for img in img_list %}
+            {% for img in car.img_list %}
               <button type="button" data-bs-target="#carouselexterier" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %}aria-label="Slide {{ forloop.counter }}"></button>
             {% endfor %}
           </div>
           <div class="carousel-inner">
-            {% if img_list %}
-              {% for img in img_list %}
+            {% if car.img_list %}
+              {% for img in car.img_list %}
                 <div class="carousel-item{% if forloop.first %} active{% endif %}">
                 <img src="{% static 'img/car_img/' %}{{car.pk }}/{{ img }}" class="d-block w-100" alt="{{ car.title }}">
                 </div>
               {% endfor %}
             {% endif %}
-
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselexterier"  data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
