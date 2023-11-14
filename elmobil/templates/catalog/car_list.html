@@ -4,6 +4,8 @@
   Каталог электромобилей
 {% endblock %}
 {% block content %}
+  <h1>Каталог электромобилей</h1>
+  <br>
   {% for car in page_obj %}
     <article class="mb-5">
       {% include "includes/car_card.html" %}
