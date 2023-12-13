@@ -27,11 +27,6 @@
     <div id="photo and performance" class="row">
       <div class="col-md-6" id="carousel">
         <div id="carouselexterier" class="carousel carousel-dark slide" data-bs-ride="carousel">
-          <div class="carousel-indicators">
-            {% for img in car.img_list %}
-              <button type="button" data-bs-target="#carouselexterier" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %}aria-label="Slide {{ forloop.counter }}"></button>
-            {% endfor %}
-          </div>
           <div class="carousel-inner">
             {% if car.img_list %}
               {% for img in car.img_list %}
