@@ -211,7 +211,7 @@ class Performance(models.Model, VerboseNamePluralMixin, IterMixin):
     )
     electric_range = models.IntegerField(
         verbose_name='Запас хода',
-        help_text='Км'
+        help_text='Км',
     )
     total_power = models.IntegerField(
         help_text='кВт',

@@ -1,0 +1,17 @@
+{% load static %}
+{% load django_bootstrap5 %}
+<div class="container">
+  <div class="card mt-3">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.title|slugify %}">{{ car.title }}</a></h5>
+      <div class="battery-bar">
+        <div class="battery-level" style="width: {{ car.performance.electric_range }}%;"></div>
+      </div>
+      <p class="card-text">Запас хода: {{ car.performance.electric_range }} км</p>
+      <div class="progress">
+        <!-- Добавление классов Bootstrap для полосы прогресса -->
+        <div class="progress-bar" role="progressbar" style="width:{{ car.recent_to_max_range }}%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
+</div>
