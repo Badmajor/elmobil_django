@@ -18,7 +18,7 @@ class TopRangeListView(ListView):
     model = Car
     paginate_by = 100
     paginate_orphans = 5
-    template_name = 'pages/car_list.html'
+    template_name = 'pages/top_range_list.html'
 
 
     def get_queryset(self):
@@ -26,10 +26,12 @@ class TopRangeListView(ListView):
             'manufacturer',
             'performance',
         ).order_by('-performance__electric_range')
+        # Получаем максимальный запас хода
+        max_value = queryset.first().performance.electric_range
         # Добавляем процент от максимального значения в queryset
         queryset = queryset.annotate(
             recent_to_max_range=models.ExpressionWrapper(
-                models.F('performance__electric_range') * 100 / models.Max('performance__electric_range'),
+                models.F('performance__electric_range') * 100 / max_value,
                 output_field=models.FloatField()
             )
         )
