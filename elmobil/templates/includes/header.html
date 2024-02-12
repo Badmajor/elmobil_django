@@ -24,6 +24,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-item nav-link{% if view_name == 'pages:top_time_charge_100' %} active{% endif %}" href="{% url 'pages:top_time_charge_100' %}">
+          ТОП 100 по скорости зарядки
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-item nav-link{% if view_name == 'pages:about' %} active{% endif %}" href="{% url 'pages:about' %}">
           О проекте
             </a>

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% block title %}
-  Топ 100 Электромобилей по запасу хода
+  {{ title_page }}
 {% endblock %}
 {% block content %}
-  <h1>Топ 100 Электромобилей по запасу хода</h1>
+  <h1>{{ title_page }}</h1>
   <br>
   {% for car in object_list %}
     <article class="mb-5">
-      {% include "pages/includes/card_electric_range.html" %}
+      {% include "pages/includes/card_car_top.html" %}
     </article>
   {% endfor %}
   {% bootstrap_pagination page_obj pages_to_show=5 justify_content='center' %}
