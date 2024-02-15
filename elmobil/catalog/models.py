@@ -2,6 +2,8 @@ import os
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 
 from .mixins import VerboseNamePluralMixin, StrTitleMixin, IterMixin
 
@@ -51,6 +53,10 @@ class Manufacturer(StrTitleMixin, models.Model):
     class Meta:
         verbose_name = 'производитель'
         verbose_name_plural = 'Производители'
+
+    def get_absolute_url(self):
+        slug = slugify(self.title)
+        return reverse('catalog:manufacturer', args=[slug])
 
 
 class BatteryType(StrTitleMixin, models.Model):
@@ -608,5 +614,9 @@ class Car(StrTitleMixin, models.Model):
         default_related_name = 'cars'
         verbose_name = 'электромобиль'
         verbose_name_plural = 'Электромобили'
+
+    def get_absolute_url(self):
+        slug = slugify(self.title)
+        return reverse('catalog:car_detail', args=[self.pk, slug])
 
 
