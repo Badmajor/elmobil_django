@@ -1,7 +1,9 @@
 
 from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 
 from .models import Post
+from catalog.constants import MAX_OBJ_ON_PAGE
 
 # Context always has arguments SITE_NAME, TITLE_FROM_INDEX
 context = {
@@ -10,31 +12,23 @@ context = {
 }
 
 
-def index(request):
-    template = 'blog/index.html'
-    posts = Post.objects.all()
-    context['posts'] = posts
-    return render(request, template, context)
+class PostsListView(ListView):
+    model = Post
+    paginate_by = MAX_OBJ_ON_PAGE
+    paginate_orphans = 5
+    ordering = '-date_of_create'
 
 
-def post_detail(request, post_slug: str):
-    template = 'blog/detail.html'
-    for post in Post.objects.all():
-        if post.post_slug == post_slug:
-            context['post'] = post
-            break
-    else:
-        context['post'] = {'id': 777,
-                           'date': 'None',
-                           'author': 'None',
-                           'image_path': '1.png',
-                           'title': 'Еще не написали',
-                           'text': 'Такого поста нет'
-                           }
-    context.update({
-        'posts': Post.objects.all(),
-    })
-    return render(request, template, context)
+class PostDetailView(DetailView):
+    model = Post
+    slug_url_kwarg = 'post_slug'
+    slug_field = 'post_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        posts = Post.objects.order_by('-date_of_create')[:10]
+        context['posts'] = posts
+        return context
 
 
 def category_posts(request, category_slug):

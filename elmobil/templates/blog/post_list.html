@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Каталог электромобилей
+{% endblock %}
+{% block content %}
+  <h1>Каталог статей</h1>
+  <br>
+  {% for post in page_obj %}
+    <article class="mb-5">
+      {% include "blog/includes/post_card.html" %}
+    </article>
+  {% endfor %}
+  {% bootstrap_pagination page_obj pages_to_show=5 justify_content='center' %}
+{% endblock %}
