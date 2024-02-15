@@ -5,6 +5,7 @@ from django.urls import path, include
 
 from blog.sitemap import PostSitemap
 from catalog.sitemap import CarsSitemap, ManufacturersSitemap
+from django.views.generic import TemplateView
 from pages.sitemap import PagesSitemap
 
 sitemaps = {
@@ -20,6 +21,7 @@ urlpatterns = [
     path('', include('catalog.urls', namespace='catalog')),
     path('', include('pages.urls', namespace='pages')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 
 if settings.DEBUG:
