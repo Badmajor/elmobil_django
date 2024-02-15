@@ -65,8 +65,6 @@ db.sqlite3-journal
 elmobil/static/
 elmobil/static_dev/
 
-elmobil/elmobil/settings.py
-
 
 # Flask stuff:git
 instance/
