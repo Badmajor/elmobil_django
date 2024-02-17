@@ -109,4 +109,3 @@ TAGGIT_CASE_INSENSITIVE = True
 
 SITE_ID = 1
 
-handler404 = 'elmobil.views.page_not_found_view'
