@@ -504,6 +504,10 @@ class Car(StrTitleMixin, models.Model):
         max_length=256,
         verbose_name='Название',
     )
+    slug = models.CharField(
+        max_length=256,
+        verbose_name='Slug'
+    )
     description = models.TextField(
         verbose_name='Описание',
         blank=True, null=True,
@@ -616,5 +620,12 @@ class Car(StrTitleMixin, models.Model):
     def get_absolute_url(self):
         slug = slugify(self.title)
         return reverse('catalog:car_detail', args=[self.pk, slug])
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save()
+
 
 

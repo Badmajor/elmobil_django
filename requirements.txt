@@ -1,5 +1,5 @@
 asgiref==3.8.0
-Django==3.2.20
+Django==5.0.3
 django-bootstrap5==22.2
 django-debug-toolbar==4.2.0
 django-taggit==4.0.0
