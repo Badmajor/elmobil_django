@@ -66,6 +66,7 @@ elmobil/static/
 elmobil/static_dev/
 
 
+
 # Flask stuff:git
 instance/
 .webassets-cache
@@ -158,3 +159,6 @@ build_tests/
 yap_testing
 html/img/img/
 my_scripts.py
+
+!elmobil/static_dev/css/
+!elmobil/static_dev/js/

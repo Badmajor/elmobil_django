@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
+    'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -97,7 +98,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static_dev',
 ]
 
-STATIC_ROOT = config('STATIC_ROOT')
+STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
