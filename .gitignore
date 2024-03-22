@@ -62,8 +62,9 @@ db.sqlite3
 db.sqlite3-journal
 *.db
 
+
+elmobil/static_dev/img/
 elmobil/static/
-elmobil/static_dev/
 
 
 
@@ -159,6 +160,3 @@ build_tests/
 yap_testing
 html/img/img/
 my_scripts.py
-
-!*.css
-!*.js
