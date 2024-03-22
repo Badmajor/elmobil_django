@@ -491,6 +491,14 @@ class Miscellaneous(models.Model, VerboseNamePluralMixin, IterMixin):
         verbose_name_plural = 'Разное'
 
 
+class ImageCar(models.Model):
+    image = models.ImageField(
+        'Фото',
+        upload_to='car_images',
+        blank=True
+    )
+
+
 class Car(StrTitleMixin, models.Model):
     title = models.CharField(
         max_length=256,
@@ -562,10 +570,8 @@ class Car(StrTitleMixin, models.Model):
         verbose_name='Выпускался до',
         null=True, default=None,
     )
-    image = models.ImageField(
-        'Фото',
-        upload_to='car_images',
-        blank=True
+    images = models.ManyToManyField(
+        ImageCar,
     )
 
     preceding_car = models.ForeignKey(
