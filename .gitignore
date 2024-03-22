@@ -160,5 +160,6 @@ yap_testing
 html/img/img/
 my_scripts.py
 
-!elmobil/static_dev/css/
-!elmobil/static_dev/js/
+!elmobil/static_dev/css/styles.css
+!elmobil/static_dev/css/bootstrap.min.css
+!elmobil/static_dev/js/bootstrap.bundle.js
