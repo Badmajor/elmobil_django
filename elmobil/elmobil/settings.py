@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'debug_toolbar',
+    'rest_framework',
     'taggit',
     'django_bootstrap5',
     'django.contrib.sitemaps',
