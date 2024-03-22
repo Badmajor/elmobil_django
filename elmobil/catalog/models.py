@@ -305,18 +305,10 @@ class Charging(models.Model, VerboseNamePluralMixin, IterMixin):
         on_delete=models.SET_NULL,
         blank=True, null=True,
     )
-    port_location = models.ForeignKey(
+    port_location = models.ManyToManyField(
         PortLocation,
         verbose_name='Расположение порта',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-    )
-    port_location_2 = models.ForeignKey(
-        PortLocation,
-        verbose_name='Расположение порта_2',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-        related_name='charging_2'
+        blank=True,
     )
     charge_power = models.DecimalField(
         max_digits=10,
