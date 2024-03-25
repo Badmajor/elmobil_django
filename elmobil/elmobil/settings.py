@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'debug_toolbar',
+    'django_extensions',
     'rest_framework',
     'taggit',
     'django_bootstrap5',
