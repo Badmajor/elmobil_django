@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -112,3 +113,4 @@ TAGGIT_CASE_INSENSITIVE = True
 
 SITE_ID = 1
 
+AUTH_USER_MODEL = 'users.User'

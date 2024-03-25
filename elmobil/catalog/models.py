@@ -498,7 +498,7 @@ class ImageCar(models.Model):
     )
 
 
-class VideoUrlYpuTube(models.Model):
+class VideoUrlYouTube(models.Model):
     url = models.URLField(
         'Ссылка на видео YouTube',
     )
@@ -584,7 +584,7 @@ class Car(StrTitleMixin, models.Model):
     )
 
     video_youtube = models.ManyToManyField(
-        VideoUrlYpuTube,
+        VideoUrlYouTube,
     )
     preceding_car = models.ForeignKey(
         'self',
