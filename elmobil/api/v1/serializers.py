@@ -10,11 +10,29 @@ from catalog.models import (AccelerationTo,
                             Drive, DimensionsWeight,
                             ImageCar,
                             Manufacturer, Miscellaneous,
+                            NominalVoltage,
                             PackConfiguration, RangeEstimation,
                             Performance,
                             Platform,
                             PortCharge, PortLocation,
-                            Segment, Side, TypeElectric)
+                            Segment, TypeElectric)
+
+
+class Base64ImageField(serializers.ImageField):
+    def to_internal_value(self, data):
+        if isinstance(data, str) and data.startswith('data:image'):
+            format, imgstr = data.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        return super().to_internal_value(data)
+
+
+class ImagePackSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        fields = '__all__'
+        model = ImageCar
 
 
 class AccelerationToSerializer(serializers.ModelSerializer):
@@ -31,7 +49,6 @@ class DriveSerializer(serializers.ModelSerializer):
 
 class PerformanceSerializer(serializers.ModelSerializer):
     acceleration_to_100 = AccelerationToSerializer()
-    acceleration_to_200 = AccelerationToSerializer()
     drive = DriveSerializer()
 
     class Meta:
@@ -45,15 +62,7 @@ class PortChargeSerializer(serializers.ModelSerializer):
         model = PortCharge
 
 
-class SideSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = Side
-
-
 class PortLocationChargeSerializer(serializers.ModelSerializer):
-    side = SideSerializer()
-    location = SideSerializer()
 
     class Meta:
         fields = '__all__'
@@ -100,11 +109,18 @@ class PackConfigurationSerializer(serializers.ModelSerializer):
         model = PackConfiguration
 
 
+class NominalVoltageSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        model = NominalVoltage
+
+
 class BatterySerializer(serializers.ModelSerializer):
     battery_type = BatteryTypeSerializer()
     architecture = ArchitectureBatterySerializer()
     cathode = CathodeSerializer()
     pack_configuration = PackConfigurationSerializer()
+    nominal_voltage = NominalVoltageSerializer()
 
     class Meta:
         fields = '__all__'
@@ -159,27 +175,11 @@ class MiscellaneousSerializer(serializers.ModelSerializer):
 
 class CarShortSerializer(serializers.ModelSerializer):
     manufacturer = ManufacturerSerializer()
+    images = ImagePackSerializer(many=True)
 
     class Meta:
-        fields = ('id', 'title', 'manufacturer', 'image')
+        fields = ('id', 'title', 'manufacturer', 'images')
         model = Car
-
-
-class Base64ImageField(serializers.ImageField):
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith('data:image'):
-            format, imgstr = data.split(';base64,')
-            ext = format.split('/')[-1]
-            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-        return super().to_internal_value(data)
-
-
-class ImagePackSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
-
-    class Meta:
-        fields = '__all__'
-        model = ImageCar
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -196,5 +196,5 @@ class CarSerializer(serializers.ModelSerializer):
     images = ImagePackSerializer(many=True)
 
     class Meta:
-        fields = '__all__'
+        exclude = ('article', )
         model = Car
