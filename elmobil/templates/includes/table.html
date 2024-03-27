@@ -14,5 +14,12 @@
         <td>{{ field }}</td>
       </tr>
     {% endfor %}
+    {% if data.get_verbose_name_plural == 'Зарядка' %}
+      {% for port_loc in data.port_location.all %}
+        <tr>
+          <td>Локация порта {{ forloop.counter }}: {{ port_loc }}</td>
+        </tr>
+      {% endfor %}
+    {% endif %}
   </tbody>
 </table>

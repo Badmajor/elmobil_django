@@ -36,20 +36,20 @@ class CarDetailView(DetailView):
                 'battery__cathode',
                 'battery__pack_configuration',
                 'battery__nominal_voltage',
-                'dimensions_weight',
-                'charging_fast__type_port',
-                'charging_fast__port_location__location',
-                'charging_fast__port_location__side',
-                'charging_fast__type_electric',
                 'charging__type_port',
-                'charging__port_location__location',
-                'charging__port_location__side',
                 'charging__type_electric',
+                'charging_fast__type_port',
+                'charging_fast__type_electric',
                 'miscellaneous__platform',
                 'miscellaneous__car_body',
                 'miscellaneous__segment',
-
-            ),
+                'dimensions_weight',
+            ).prefetch_related(
+                'charging__port_location',
+                'charging_fast__port_location',
+                'images',
+                'video_youtube'
+            ).order_by('title'),
             pk=self.kwargs['pk']
         )
         # car.increase_view_count() #  счетчик просмотров
