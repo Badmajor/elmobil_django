@@ -1,4 +1,3 @@
-import logging
 import os.path
 import re
 import sqlite3
@@ -418,5 +417,3 @@ class Command(BaseCommand):
             type=str,
             help='Path to the DB with table pages_code(SQLite)'
         )
-
-
