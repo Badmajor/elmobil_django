@@ -596,22 +596,6 @@ class Car(StrTitleMixin, models.Model):
         null=False,
     )
 
-    @property
-    def img_list(self):
-        img_list = []
-        try:
-            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/')
-            for file in files:
-                if 'jpg' in file:
-                    img_list.append(file)
-            return img_list
-        except FileNotFoundError:
-            return None
-
-    def increase_view_count(self):
-        self.view_count += 1
-        self.save()
-
     class Meta:
         default_related_name = 'cars'
         verbose_name = 'электромобиль'
@@ -627,3 +611,19 @@ class Car(StrTitleMixin, models.Model):
             title = f'{self.title.replace("+", " plus")} {self.performance.electric_range}'
             self.slug = slugify(title)
         super().save()
+
+    @property
+    def img_list(self):
+        img_list = []
+        try:
+            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/')
+            for file in files:
+                if 'jpg' in file:
+                    img_list.append(file)
+            return img_list
+        except FileNotFoundError:
+            return None
+
+    def increase_view_count(self):
+        self.view_count += 1
+        self.save()

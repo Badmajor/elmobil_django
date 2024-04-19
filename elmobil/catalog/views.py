@@ -18,7 +18,7 @@ class CarsListView(ListView):
             'real_range_estimation',
             'performance__acceleration_to_100',
             'performance__drive',
-        ).order_by('title')
+        ).order_by('-year_release')
 
 
 class CarDetailView(DetailView):
@@ -49,7 +49,7 @@ class CarDetailView(DetailView):
                 'charging_fast__port_location',
                 'images',
                 'video_youtube'
-            ).order_by('title'),
+            ).order_by('-year_release'),
             pk=self.kwargs['pk']
         )
         # car.increase_view_count() #  счетчик просмотров
@@ -68,7 +68,7 @@ class ManufacturerDetailView(DetailView):
             'performance',
         ).filter(
             manufacturer=self.object
-        ).order_by('title')
+        ).order_by('-year_release')
 
         paginator = Paginator(cars, MAX_OBJ_ON_PAGE)
         page_number = self.request.GET.get('page')

@@ -21,6 +21,8 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('', include('catalog.urls', namespace='catalog')),
     path('', include('pages.urls', namespace='pages')),
+    path(r'auth/', include('djoser.urls')),
+    path(r'auth/', include('djoser.urls.authtoken')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
