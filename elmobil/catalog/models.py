@@ -476,9 +476,14 @@ class Miscellaneous(models.Model, VerboseNamePluralMixin, IterMixin):
 
 
 class ImageCar(models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Название',
+        blank=False,
+        null=False,
+    )
     image = models.ImageField(
         'Фото',
-        upload_to='car_images',
     )
 
 
@@ -597,7 +602,7 @@ class Car(StrTitleMixin, models.Model):
     )
 
     class Meta:
-        default_related_name = 'cars'
+        default_related_name = 'car'
         verbose_name = 'электромобиль'
         verbose_name_plural = 'Электромобили'
 

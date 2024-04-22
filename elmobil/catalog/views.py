@@ -18,6 +18,11 @@ class CarsListView(ListView):
             'real_range_estimation',
             'performance__acceleration_to_100',
             'performance__drive',
+        ).prefetch_related(
+                'charging__port_location',
+                'charging_fast__port_location',
+                'images',
+                'video_youtube'
         ).order_by('-year_release')
 
 
