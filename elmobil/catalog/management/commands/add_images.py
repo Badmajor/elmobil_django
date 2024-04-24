@@ -82,11 +82,7 @@ class Command(BaseCommand):
                             obj.image = file
                             obj.save()
                         except Exception as ex:
-                            print(ex)
-                            print(type(file), obj)
                             raise ex
-                print(obj.image)
-                print('URL', obj.image.url)
                 car_obj.images.add(obj)
             else:
                 update_html_code(path_db, article)
