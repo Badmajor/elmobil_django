@@ -2,8 +2,6 @@ import os
 import sqlite3
 
 from bs4 import BeautifulSoup
-from django.core.files import File
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import BaseCommand
 
 from catalog.models import Car, ImageCar
@@ -75,15 +73,12 @@ class Command(BaseCommand):
             images = _get_images(car_name, path_to_images)
             for path in images:
                 with open(path, 'rb') as f:
-                    file = File(f)
                     obj, created = ImageCar.objects.get_or_create(name=normalize_name(file.name))
                     if created:
                         try:
-                            obj.image = file
+                            obj.image = f
                             obj.save()
                         except Exception as ex:
-                            print(ex)
-                            print(type(file), obj)
                             raise ex
                 car_obj.images.add(obj)
             else:
