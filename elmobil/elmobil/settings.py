@@ -14,7 +14,7 @@ ALLOWED_HOSTS = config(
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
-TEST_BASE = os.getenv('TEST_BASE', False) == 'True'
+TEST_BASE = config('TEST_BASE', False) == 'True'
 
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',

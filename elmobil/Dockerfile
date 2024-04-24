@@ -1,6 +1,6 @@
 FROM python:3.10
 
-WORKDIR /app
+WORKDIR /elmobil
 
 RUN pip install gunicorn==21.2.0
 

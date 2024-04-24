@@ -132,6 +132,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+elmobildata.json
 
 # Pyre type checker
 .pyre/
@@ -154,7 +155,8 @@ dmypy.json
 .mypy_cache
 
 # папки со статикой и медиа
-media/
+media/*
+infra/img/
 
 # Testing
 build_tests/
