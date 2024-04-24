@@ -1,3 +1,5 @@
+import os
+
 from decouple import config
 from pathlib import Path
 
@@ -7,7 +9,12 @@ SECRET_KEY = config('SECRET_KEY_DJANGO')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
+
+TEST_BASE = os.getenv('TEST_BASE', False) == 'True'
 
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
@@ -65,12 +72,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'elmobil.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+def get_db_settings():
+    if TEST_BASE:
+        return {
+            'default':
+                {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': BASE_DIR / 'db.sqlite3'
+                }
+        }
+    return {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+            'USER': os.getenv('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+            'HOST': os.getenv('DB_HOST', '172.17.0.2'),
+            'PORT': os.getenv('DB_PORT', 5432),
+        }
     }
-}
+
+
+DATABASES = get_db_settings()
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
