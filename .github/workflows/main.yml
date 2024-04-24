@@ -74,15 +74,15 @@ jobs:
           # которые нужно выполнить на сервере,
           # с которым установлено соединение
           script: |
-            cd elmobil/infra
+            cd elmobil/infra/
             # Выполняет pull образов с Docker Hub
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml pull
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml pull
             # Перезапускает все контейнеры в Docker Compose
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml down
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml up -d
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml down
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml up -d
             # Выполняет миграции и сбор статики
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
-            echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml exec backend cp -r /elmobil/static/. /static/
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+            echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml exec backend cp -r /elmobil/static/. /static/
             # Обновляем базу
             echo "$PASS_SUDO" | sudo docker compose -f docker-compose.production.yml exec backend python manage.py loaddata ./temp_data/elmobil_data.json
