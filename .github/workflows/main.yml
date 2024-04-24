@@ -1,0 +1,8 @@
+name: Elmobil.ru Workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:

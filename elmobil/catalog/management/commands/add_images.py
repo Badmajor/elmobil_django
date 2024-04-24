@@ -3,7 +3,6 @@ import sqlite3
 
 from bs4 import BeautifulSoup
 from django.core.files import File
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import BaseCommand
 
 from catalog.models import Car, ImageCar
@@ -76,7 +75,9 @@ class Command(BaseCommand):
             for path in images:
                 with open(path, 'rb') as f:
                     file = File(f)
-                    obj, created = ImageCar.objects.get_or_create(name=normalize_name(file.name))
+                    obj, created = ImageCar.objects.get_or_create(
+                        name=normalize_name(file.name)
+                    )
                     if created:
                         try:
                             obj.image = file

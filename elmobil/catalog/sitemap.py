@@ -10,7 +10,6 @@ class CarsSitemap(sitemaps.Sitemap):
         return Car.objects.order_by('title')
 
 
-
 class ManufacturersSitemap(sitemaps.Sitemap):
     changefreq = 'weekly'
     priority = 0.9

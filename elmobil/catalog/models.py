@@ -613,7 +613,8 @@ class Car(StrTitleMixin, models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.slug:
-            title = f'{self.title.replace("+", " plus")} {self.performance.electric_range}'
+            title = (f'{self.title.replace("+", " plus")} '
+                     f'{self.performance.electric_range}')
             self.slug = slugify(title)
         super().save()
 
@@ -621,7 +622,9 @@ class Car(StrTitleMixin, models.Model):
     def img_list(self):
         img_list = []
         try:
-            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/')
+            files = os.listdir(
+                f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/'
+            )
             for file in files:
                 if 'jpg' in file:
                     img_list.append(file)

@@ -15,6 +15,7 @@ services:
     image: badmajor/elmobil_backend
     env_file: .env
     volumes:
+      -
       - static:/static/
       - media:/elmobil/media/
 

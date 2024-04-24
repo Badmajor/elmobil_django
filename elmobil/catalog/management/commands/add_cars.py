@@ -8,11 +8,11 @@ from django.core.management import BaseCommand
 from django.db import models
 
 from catalog.models import (AccelerationTo,
-                            ArchitectureBattery, Battery, BatteryType,
+                            ArchitectureBattery, Battery,
+                            BatteryType,
                             Car, CarBody,
                             Charging, Cathode,
                             Drive, DimensionsWeight,
-                            ImageCar,
                             Manufacturer, Miscellaneous,
                             NominalVoltage,
                             PackConfiguration, RangeEstimation,
@@ -177,13 +177,19 @@ def _get_battery(block: BeautifulSoup):
             BatteryType, data.get('Battery Type')),
         number_of_cells=_check_digit_and_split(data.get('Number of Cells')),
         architecture=_get_or_create_obj(
-            ArchitectureBattery, _check_digit_and_split(data.get('Architecture'))),
+            ArchitectureBattery,
+            _check_digit_and_split(
+                data.get('Architecture')
+            )
+        ),
         cathode=_get_or_create_obj(
             Cathode, data.get('Cathode Material')),
         pack_configuration=_get_or_create_obj(
             PackConfiguration, data.get('Pack Configuration')),
         nominal_voltage=_get_or_create_obj(
-            NominalVoltage, _check_digit_and_split(data.get('Nominal Voltage'))),
+            NominalVoltage, _check_digit_and_split(
+                data.get('Nominal Voltage')
+            )),
         warranty_period=_check_digit_and_split(data.get('Warranty Period')),
         warranty_mileage=_check_digit_and_split(data.get('Warranty Mileage')),
     )
@@ -194,7 +200,10 @@ def _get_charging(block: BeautifulSoup):
     data = get_dict_from_soup(block)
     if charge_power_type := data.pop('Charge Power'):
         charge_power = charge_power_type.split(' ')[0]
-        type_electric = _get_or_create_obj(TypeElectric, charge_power_type.split(' ')[-1])
+        type_electric = _get_or_create_obj(
+            TypeElectric,
+            charge_power_type.split(' ')[-1]
+        )
     else:
         charge_power, type_electric = (None, None)
     charge_speed = _check_digit_and_split(data.get('Charge Speed'))
@@ -236,7 +245,9 @@ def _get_charging_fast(block: BeautifulSoup):
     data = get_dict_from_soup(block)
     if charge_power_type := data.get('Fastcharge Power (10-80%)'):
         charge_power = _check_digit_and_split(charge_power_type)
-        type_electric = _get_or_create_obj(TypeElectric, charge_power_type.split(' ')[-1])
+        type_electric = _get_or_create_obj(
+            TypeElectric,
+            charge_power_type.split(' ')[-1])
     else:
         charge_power, type_electric = (None, None)
     charge_speed = _check_digit_and_split(data.get('Fastcharge Speed'))
@@ -290,14 +301,22 @@ def _get_dimensions_weight(data: dict):
     obj, _ = DimensionsWeight.objects.get_or_create(
         length=_check_digit_and_split(data.get('Length')),
         width=_check_digit_and_split(data.get('Width')),
-        width_with_mirrors=_check_digit_and_split(data.get('Width with mirrors')),
+        width_with_mirrors=_check_digit_and_split(
+            data.get('Width with mirrors')
+        ),
         height=_check_digit_and_split(data.get('Height')),
         wheelbase=_check_digit_and_split(data.get('Wheelbase')),
-        weight_unladen=_check_digit_and_split(data.get('Weight Unladen (EU)')),
-        gross_weight=_check_digit_and_split(data.get('Gross Vehicle Weight (GVWR)')),
+        weight_unladen=_check_digit_and_split(data.get(
+            'Weight Unladen (EU)')
+        ),
+        gross_weight=_check_digit_and_split(data.get(
+            'Gross Vehicle Weight (GVWR)')
+        ),
         payload=_check_digit_and_split(data.get('Max. Payload')),
         cargo_volume=_check_digit_and_split(data.get('Cargo Volume')),
-        cargo_volume_frunk=_check_digit_and_split(data.get('Cargo Volume Frunk')),
+        cargo_volume_frunk=_check_digit_and_split(
+            data.get('Cargo Volume Frunk')
+        ),
         tow_hitch=yes_no_bool(data.get('Tow Hitch Possible')),
     )
     return obj
@@ -324,7 +343,12 @@ def _get_miscellaneous(data: dict):
 
 
 def _get_data_car(html_page):
-    html_page = html_page.decode('utf-8').replace('<td>Fastcharge Time', '<tr><td>Fastcharge Time')
+    html_page = html_page.decode(
+        'utf-8'
+    ).replace(
+        '<td>Fastcharge Time',
+        '<tr><td>Fastcharge Time'
+    )
     soup = BeautifulSoup(html_page, 'html.parser')
     header = soup.find('header', class_='sub-header')
     years = re.sub(r'[a-zA-Z\s]', '', header.find('span').text)
@@ -369,8 +393,10 @@ def _get_data_car(html_page):
         )
     )
     description = f'''
-{title} - это {miscellaneous.segment} разработанный {manufacturer} на платформе {miscellaneous.platform}
-Поколение {year_release} разгоняется до 100км/ч за {performance.acceleration_to_100} c.. 
+{title} - это {miscellaneous.segment} разработанный {manufacturer}
+на платформе {miscellaneous.platform}
+Поколение {year_release}
+разгоняется до 100км/ч за {performance.acceleration_to_100} c..
 Дальность хода на одном заряде ~ {performance.electric_range} км. '''
     return {
         'title': f'{title} {years}',
