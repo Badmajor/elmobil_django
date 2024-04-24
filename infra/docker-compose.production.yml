@@ -1,0 +1,35 @@
+version: '3.3'
+
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    image: badmajor/elmobil_backend
+    env_file: .env
+    volumes:
+      -
+      - static:/static/
+      - media:/elmobil/media/
+
+      - ./elmobil_data.json:/elmobil/temp_data/elmobil_data.json
+    depends_on:
+      - db
+  nginx:
+    image: nginx:1.19.3
+    ports:
+      - "8777:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - static:/static/
+      - media:/media/
+      - ./img/:/media/img/
+    depends_on:
+      - backend

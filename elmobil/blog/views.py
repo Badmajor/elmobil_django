@@ -5,12 +5,6 @@ from django.views.generic import ListView, DetailView
 from .models import Post
 from catalog.constants import MAX_OBJ_ON_PAGE
 
-# Context always has arguments SITE_NAME, TITLE_FROM_INDEX
-context = {
-    'SITE_NAME': 'elmobil.ru',
-    'TITLE_FROM_INDEX': 'Электромобили: преимущества, технологии и перспективы развития',
-}
-
 
 class PostsListView(ListView):
     model = Post
@@ -31,7 +25,6 @@ class PostDetailView(DetailView):
         return context
 
 
-def category_posts(request, category_slug):
+def category_posts(request):
     template = 'blog/category.html'
-    context['slug'] = category_slug
-    return render(request, template, context)
+    return render(request, template)

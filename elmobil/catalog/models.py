@@ -133,7 +133,7 @@ class Battery(models.Model, VerboseNamePluralMixin, IterMixin):
     )
     number_of_cells = models.IntegerField(
         verbose_name='Количество ячеек',
-        blank=True,
+        blank=True, null=True,
         help_text='шт.',
     )
     architecture = models.ForeignKey(
@@ -161,6 +161,16 @@ class Battery(models.Model, VerboseNamePluralMixin, IterMixin):
         on_delete=models.SET_NULL,
         blank=True, null=True,
         help_text='В',
+    )
+    warranty_period = models.IntegerField(
+        verbose_name='Срок гарантии',
+        blank=True, null=True,
+        help_text='лет',
+    )
+    warranty_mileage = models.IntegerField(
+        verbose_name='Гарантийный пробег',
+        blank=True, null=True,
+        help_text='км',
     )
 
     class Meta:
@@ -203,14 +213,6 @@ class Performance(models.Model, VerboseNamePluralMixin, IterMixin):
         on_delete=models.SET_NULL,
         blank=True, null=True,
     )
-    acceleration_to_200 = models.ForeignKey(
-        AccelerationTo,
-        help_text='с.',
-        blank=True, null=True,
-        verbose_name='Разгон до 200км/ч',
-        on_delete=models.SET_NULL,
-        related_name='performance_to_200'
-    )
     top_speed = models.IntegerField(
         verbose_name='Максимальная скорость',
         help_text='Км/ч',
@@ -225,7 +227,8 @@ class Performance(models.Model, VerboseNamePluralMixin, IterMixin):
     )
     total_torque = models.IntegerField(
         help_text='Нм',
-        verbose_name='Крутящий момент'
+        verbose_name='Крутящий момент',
+        blank=True, null=True,
     )
     drive = models.ForeignKey(
         Drive,
@@ -252,35 +255,14 @@ class PortCharge(StrTitleMixin, models.Model):
         verbose_name_plural = 'Типы портов зарядки'
 
 
-class Side(StrTitleMixin, models.Model):
+class PortLocation(StrTitleMixin, models.Model):
     title = models.CharField(
         max_length=256,
-        verbose_name='Название'
-    )
-
-    class Meta:
-        verbose_name = 'сторона'
-        verbose_name_plural = 'Стороны'
-
-
-class PortLocation(StrTitleMixin, models.Model):
-    side = models.ForeignKey(
-        Side,
-        verbose_name='Сторона',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-        related_name='port_location_side'
-    )
-    location = models.ForeignKey(
-        Side,
         verbose_name='Расположение',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-        related_name='port_location_location'
     )
 
     def __str__(self):
-        return f'{self.side} - {self.location}'
+        return self.title
 
     class Meta:
         verbose_name = 'расположение порта'
@@ -305,24 +287,17 @@ class Charging(models.Model, VerboseNamePluralMixin, IterMixin):
         on_delete=models.SET_NULL,
         blank=True, null=True,
     )
-    port_location = models.ForeignKey(
+    port_location = models.ManyToManyField(
         PortLocation,
         verbose_name='Расположение порта',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-    )
-    port_location_2 = models.ForeignKey(
-        PortLocation,
-        verbose_name='Расположение порта_2',
-        on_delete=models.SET_NULL,
-        blank=True, null=True,
-        related_name='charging_2'
+        blank=True,
     )
     charge_power = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         verbose_name='Мощность зарядки',
-        help_text='кВт⋅ч'
+        help_text='кВт⋅ч',
+        blank=True, null=True,
 
     )
     type_electric = models.ForeignKey(
@@ -331,7 +306,7 @@ class Charging(models.Model, VerboseNamePluralMixin, IterMixin):
         on_delete=models.SET_NULL,
         blank=True, null=True,
     )
-    charge_time = models.TimeField(
+    charge_time = models.DurationField(
         blank=True,
         null=True,
         verbose_name='Время зарядки (до 80%)',
@@ -340,7 +315,8 @@ class Charging(models.Model, VerboseNamePluralMixin, IterMixin):
     charge_speed = models.IntegerField(
         blank=True,
         help_text='км/ч',
-        verbose_name='Скорость зарядки'
+        verbose_name='Скорость зарядки',
+        null=True,
     )
 
     class Meta:
@@ -499,10 +475,36 @@ class Miscellaneous(models.Model, VerboseNamePluralMixin, IterMixin):
         verbose_name_plural = 'Разное'
 
 
+class ImageCar(models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Название',
+        blank=False,
+        null=False,
+    )
+    image = models.ImageField(
+        'Фото',
+    )
+
+
+class VideoUrlYouTube(models.Model):
+    url = models.URLField(
+        'Ссылка на видео YouTube',
+    )
+
+
 class Car(StrTitleMixin, models.Model):
     title = models.CharField(
         max_length=256,
         verbose_name='Название',
+        blank=False,
+        null=False,
+
+    )
+    slug = models.CharField(
+        max_length=256,
+        verbose_name='Slug',
+        unique=True
     )
     description = models.TextField(
         verbose_name='Описание',
@@ -570,12 +572,12 @@ class Car(StrTitleMixin, models.Model):
         verbose_name='Выпускался до',
         null=True, default=None,
     )
-    image = models.ImageField(
-        'Фото',
-        upload_to='car_images',
-        blank=True
+    images = models.ManyToManyField(
+        ImageCar,
     )
-
+    video_youtube = models.ManyToManyField(
+        VideoUrlYouTube,
+    )
     preceding_car = models.ForeignKey(
         'self',
         verbose_name='Предыдущая модель',
@@ -594,11 +596,35 @@ class Car(StrTitleMixin, models.Model):
         related_name='next_model'
     )
 
+    article = models.IntegerField(
+        'артикул',
+        null=False,
+    )
+
+    class Meta:
+        default_related_name = 'car'
+        verbose_name = 'электромобиль'
+        verbose_name_plural = 'Электромобили'
+
+    def get_absolute_url(self):
+        slug = slugify(self.title)
+        return reverse('catalog:car_detail', args=[self.pk, slug])
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.slug:
+            title = (f'{self.title.replace("+", " plus")} '
+                     f'{self.performance.electric_range}')
+            self.slug = slugify(title)
+        super().save()
+
     @property
     def img_list(self):
         img_list = []
         try:
-            files = os.listdir(f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/')
+            files = os.listdir(
+                f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/'
+            )
             for file in files:
                 if 'jpg' in file:
                     img_list.append(file)
@@ -609,14 +635,3 @@ class Car(StrTitleMixin, models.Model):
     def increase_view_count(self):
         self.view_count += 1
         self.save()
-
-    class Meta:
-        default_related_name = 'cars'
-        verbose_name = 'электромобиль'
-        verbose_name_plural = 'Электромобили'
-
-    def get_absolute_url(self):
-        slug = slugify(self.title)
-        return reverse('catalog:car_detail', args=[self.pk, slug])
-
-

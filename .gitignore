@@ -61,9 +61,12 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 *.db
+*.sqlite3
 
+
+elmobil/static_dev/img/
 elmobil/static/
-elmobil/static_dev/
+
 
 
 # Flask stuff:git
@@ -129,6 +132,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+elmobil_data.json
 
 # Pyre type checker
 .pyre/
@@ -151,7 +155,8 @@ dmypy.json
 .mypy_cache
 
 # папки со статикой и медиа
-media/
+elmobil/img/
+
 
 # Testing
 build_tests/

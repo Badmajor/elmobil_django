@@ -1,3 +1,5 @@
+import os
+
 from decouple import config
 from pathlib import Path
 
@@ -7,12 +9,19 @@ SECRET_KEY = config('SECRET_KEY_DJANGO')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
+
+TEST_BASE = config('TEST_BASE', False) == 'True'
 
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
+    'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -21,6 +30,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'debug_toolbar',
+    'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'taggit',
     'django_bootstrap5',
     'django.contrib.sitemaps',
@@ -59,12 +72,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'elmobil.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+def get_db_settings():
+    if TEST_BASE:
+        return {
+            'default':
+                {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': BASE_DIR / 'db.sqlite3'
+                }
+        }
+    return {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+            'USER': os.getenv('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+            'HOST': os.getenv('DB_HOST', '172.17.0.2'),
+            'PORT': os.getenv('DB_PORT', 5432),
+        }
     }
-}
+
+
+DATABASES = get_db_settings()
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -97,7 +128,10 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static_dev',
 ]
 
-STATIC_ROOT = config('STATIC_ROOT')
+STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -109,3 +143,31 @@ TAGGIT_CASE_INSENSITIVE = True
 
 SITE_ID = 1
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {},
+    'LOGIN_FIELD': 'email',
+    'HIDE_USERS': True,
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
