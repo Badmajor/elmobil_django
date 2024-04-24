@@ -64,7 +64,8 @@ jobs:
       - name: Executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         env:
-          PASS_SUDO: ${{ secrets.PASS_SUDO}}
+          PASS_SUDO: ${{ secrets.PASS_SUDO }}
+          TEST: ${{ secrets.TEST }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
@@ -74,6 +75,7 @@ jobs:
           # которые нужно выполнить на сервере,
           # с которым установлено соединение
           script: |
+            echo "$TEST"
             cd elmobil/infra/
             # Выполняет pull образов с Docker Hub
             echo "$PASS_SUDO" | sudo -S docker compose -f docker-compose.production.yml pull
