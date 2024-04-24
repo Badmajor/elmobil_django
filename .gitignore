@@ -132,7 +132,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-elmobildata.json
+elmobil_data.json
 
 # Pyre type checker
 .pyre/
