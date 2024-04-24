@@ -17,7 +17,6 @@ services:
     volumes:
       - static:/static/
       - media:/elmobil/media/
-
       - ./elmobil_data.json:/elmobil/temp_data/elmobil_data.json
     depends_on:
       - db
