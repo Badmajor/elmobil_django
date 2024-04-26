@@ -10,8 +10,31 @@ elmobil.ru задумывался как блог про электромоби�
 ```bash
 git clone git@github.com:Badmajor/elmobil_django.git
 ```
-
-Cоздать и активировать виртуальное окружение:
+Перейти в каталог с docker-compose.yml
+```bash
+cd elmobil_django/infra_test/
+```
+Подготовить файл .env
+```bash
+cp .env.example .env
+```
+Упаковать и запустить контейнеры:
+```bash
+sudo docker compose up --build -d
+```
+Выполнить миграции:
+```bash
+sudo docker compose exec backend python manage.py migrate
+```
+Собрать статику и скопировать статику:
+```bash
+sudo docker compose exec backend python manage.py collectstatic
+sudo docker compose exec backend cp -r /elmobil/static/. /static/
+```
+Наполнить базу данных:
+```bash
+sudo docker compose exec backend python manage.py migrate
+```
 
 ```bash
 python3 -m venv env
