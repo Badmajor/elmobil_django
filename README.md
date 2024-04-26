@@ -42,14 +42,19 @@ http://127.0.0.1:8777/
 
 ## Вход в админ зону:
 
-http://127.0.0.1:8777/admin/
+- http://127.0.0.1:8777/admin/
 
 Данные для superusera:
-email: admin@admin.ru
-pass: admin
+- email: admin@admin.ru
+- pass: admin
+
+## Документация API:
+
+- http://127.0.0.1:8777/redoc/
+
 
 ## Данные тестового пользователя:
 
 Тестовый пользователь:
-email: test@test.ru
-pass: testpassword
+- email: test@test.ru
+- pass: testpassword
