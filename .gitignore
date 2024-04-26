@@ -155,7 +155,8 @@ elmobil_data.json
 .mypy_cache
 
 # папки со статикой и медиа
-elmobil/img/
+elmobil/media/
+
 
 
 # Testing

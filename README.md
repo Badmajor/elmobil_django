@@ -44,7 +44,7 @@ http://127.0.0.1:8777/
 
 - http://127.0.0.1:8777/admin/
 
-Данные для superusera:
+Данные для superuser:
 - email: admin@admin.ru
 - pass: admin
 
