@@ -1,3 +1,5 @@
+[![Elmobil.ru Workflow](https://github.com/Badmajor/elmobil_django/actions/workflows/main.yml/badge.svg)](https://github.com/Badmajor/elmobil_django/actions/workflows/main.yml)
+
 # О проекте
 
 elmobil.ru задумывался как блог про электромобили, 
@@ -33,42 +35,21 @@ sudo docker compose exec backend cp -r /elmobil/static/. /static/
 ```
 Наполнить базу данных:
 ```bash
-sudo docker compose exec backend python manage.py migrate
+sudo docker compose exec backend python manage.py loaddata ./temp_data/example_data.json
 ```
+Каталог будет доступен по адресу:
+http://127.0.0.1:8777/
 
-```bash
-python3 -m venv env
-source env/bin/activate
-```
-Установить зависимости из файла requirements.txt:
-```bash
-python3 -m pip install --upgrade pip
-pip install -r requirements.txt
-```
+## Вход в админ зону:
 
-создать файл .env  со следующим содержание:
-```bash
-SECRET_KEY_DJANGO='django-secret'
-DEBUG=False
-ALLOWED_HOSTS=127.0.0.1
-STATIC_ROOT='<путь до каталога где планируете размещать статику>'
-```
+http://127.0.0.1:8777/admin/
 
-Выполнить миграции:
-```bash
-python3 manage.py migrate
-```
-Запустить проект:
-```bash
-python3 manage.py runserver
-```
+Данные для superusera:
+email: admin@admin.ru
+pass: admin
 
-# В процессе:
+## Данные тестового пользователя:
 
-## Написать API для перехода на SPA
-
-## Увеличение базы электромобилей до 700 шт.
-
-## Разработать и внедрить автогенерацию описания электромобилей
-
-## Реализовать CI/CD
+Тестовый пользователь:
+email: test@test.ru
+pass: testpassword
