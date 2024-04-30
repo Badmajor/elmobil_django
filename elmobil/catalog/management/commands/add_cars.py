@@ -2,7 +2,7 @@ import os.path
 import re
 import sqlite3
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from django.core.exceptions import FieldError
 from django.core.management import BaseCommand
 from django.db import models
@@ -342,6 +342,34 @@ def _get_miscellaneous(data: dict):
     return obj
 
 
+def _get_article_related_car(comment, article=None):
+    html_block = comment.find_next('a')
+    match = re.search(r'/car/(\d+)', html_block.prettify())
+    if match:
+        article = match.group(1)
+    return article
+
+
+def _get_next_previous_car(soup,
+                           next_car_article=None,
+                           previous_car_article=None,
+                           next_car=None,
+                           preceding_car=None):
+    comments = soup.find_all(string=lambda text: isinstance(text, Comment))
+    for comment in comments:
+        if 'outdated' in comment:
+            next_car_article = _get_article_related_car(comment)
+        if 'section news' in comment:
+            previous_car_article = _get_article_related_car(comment)
+    if next_car_article:
+        if Car.objects.filter(article=next_car_article).exists():
+            next_car = Car.objects.get(article=next_car_article)
+    if previous_car_article:
+        if Car.objects.filter(article=previous_car_article).exists():
+            preceding_car = Car.objects.get(article=previous_car_article)
+    return next_car, preceding_car
+
+
 def _get_data_car(html_page):
     html_page = html_page.decode(
         'utf-8'
@@ -392,6 +420,7 @@ def _get_data_car(html_page):
             'Miscellaneous'
         )
     )
+    next_car, preceding_car = _get_next_previous_car(soup)
     description = f'''
 {title} - это {miscellaneous.segment} разработанный {manufacturer}
 на платформе {miscellaneous.platform}
@@ -411,6 +440,8 @@ def _get_data_car(html_page):
         'miscellaneous': miscellaneous,
         'year_release': year_release,
         'year_until': year_until,
+        'next_car': next_car,
+        'preceding_car': preceding_car,
     }
 
 
