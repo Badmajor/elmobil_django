@@ -2,7 +2,7 @@ import os.path
 import re
 import sqlite3
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from django.core.exceptions import FieldError
 from django.core.management import BaseCommand
 from django.db import models
@@ -121,6 +121,7 @@ def _get_html_code(path_db):
     SELECT id_car, code_page
     FROM pages_code
     WHERE is_added = 0
+    ORDER BY id_car
     LIMIT 1
     """
     with sqlite3.connect(path_db) as conn:
@@ -342,7 +343,28 @@ def _get_miscellaneous(data: dict):
     return obj
 
 
-def _get_data_car(html_page):
+def _get_article_related_car(comment, article=None):
+    html_block = comment.find_next('a')
+    match = re.search(r'/car/(\d+)', html_block.prettify())
+    if match:
+        article = match.group(1)
+    return article
+
+
+def _get_previous_car(soup,
+                      previous_car_article=None,
+                      preceding_car=None):
+    comments = soup.find_all(string=lambda text: isinstance(text, Comment))
+    for comment in comments:
+        if 'section news' in comment:
+            previous_car_article = _get_article_related_car(comment)
+    if previous_car_article:
+        if Car.objects.filter(article=previous_car_article).exists():
+            preceding_car = Car.objects.get(article=previous_car_article)
+    return preceding_car
+
+
+def _get_data_car(html_page, article):
     html_page = html_page.decode(
         'utf-8'
     ).replace(
@@ -392,6 +414,7 @@ def _get_data_car(html_page):
             'Miscellaneous'
         )
     )
+    preceding_car = _get_previous_car(soup)
     description = f'''
 {title} - это {miscellaneous.segment} разработанный {manufacturer}
 на платформе {miscellaneous.platform}
@@ -399,6 +422,7 @@ def _get_data_car(html_page):
 разгоняется до 100км/ч за {performance.acceleration_to_100} c..
 Дальность хода на одном заряде ~ {performance.electric_range} км. '''
     return {
+        'article': article,
         'title': f'{title} {years}',
         'description': description,
         'manufacturer': manufacturer,
@@ -411,6 +435,7 @@ def _get_data_car(html_page):
         'miscellaneous': miscellaneous,
         'year_release': year_release,
         'year_until': year_until,
+        'preceding_car': preceding_car,
     }
 
 
@@ -423,12 +448,10 @@ class Command(BaseCommand):
         while data_db := _get_html_code(path_db):
             count += 1
             self.stdout.write(f'{data_db["id_car"]}/{count}')
-            data_car = _get_data_car(data_db["code_page"])
+            data_car = _get_data_car(data_db["code_page"], data_db['id_car'])
             car_instance = Car(
                 **data_car
             )
-            car_instance.article = data_db['id_car']
-
             try:
                 car_instance.save()
                 update_html_code(path_db, data_db['id_car'])

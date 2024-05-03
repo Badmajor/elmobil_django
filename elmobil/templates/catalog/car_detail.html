@@ -72,6 +72,18 @@
         {% else %}
           {% include "includes/car_title.html" %}
         {% endif %}
+        <br>
+        <br>
+        <div>
+          {% if car.next_car %}
+          Следующия модель: <a href="{% url 'catalog:car_detail_pk' car.next_car.id %}">{{ car.next_car }}</a>
+        {% endif %}
+        <br>
+        {% if car.preceding_car %}
+          Предыдущая модель: <a href="{% url 'catalog:car_detail_pk' car.preceding_car.id %}">{{ car.preceding_car }}</a>
+        {% endif %}
+        </div>
+
       </div>
       {% if car.real_range_estimation %}
       <div class="tab-pane fade" id="nav-real-range" role="tabpanel" aria-labelledby="real-range-tab">

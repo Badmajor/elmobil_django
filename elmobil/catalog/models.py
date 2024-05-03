@@ -587,14 +587,14 @@ class Car(StrTitleMixin, models.Model):
         related_name='preceding_model'
     )
 
-    next_car = models.ForeignKey(
-        'self',
-        verbose_name='Предыдущая модель',
-        null=True,
-        default=None,
-        on_delete=models.SET_NULL,
-        related_name='next_model'
-    )
+    # next_car = models.ForeignKey(
+    #     'self',
+    #     verbose_name='Предыдущая модель',
+    #     null=True,
+    #     default=None,
+    #     on_delete=models.SET_NULL,
+    #     related_name='next_model'
+    # )
 
     article = models.IntegerField(
         'артикул',
@@ -619,18 +619,8 @@ class Car(StrTitleMixin, models.Model):
         super().save()
 
     @property
-    def img_list(self):
-        img_list = []
-        try:
-            files = os.listdir(
-                f'{settings.BASE_DIR}/static/img/car_img/{self.pk}/'
-            )
-            for file in files:
-                if 'jpg' in file:
-                    img_list.append(file)
-            return img_list
-        except FileNotFoundError:
-            return None
+    def next_car(self):
+        return Car.objects.filter(preceding_car=self).first()
 
     def increase_view_count(self):
         self.view_count += 1
