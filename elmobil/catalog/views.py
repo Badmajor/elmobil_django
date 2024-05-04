@@ -57,8 +57,22 @@ class CarDetailView(DetailView):
             ).order_by('-year_release'),
             pk=self.kwargs['pk']
         )
-        # car.increase_view_count() #  счетчик просмотров
+        # Храним просмотренные страницы в сессии
+        self._increment_view_count(car)
         return car
+
+    def _increment_view_count(self, car):
+        """
+        Увеличивает счетчик просмотров для указанного автомобиля.
+        Примечания:
+            Метод проверяет, была ли страница с автомобилем уже просмотрена в текущей сессии.
+            Сохраняет просмотренные страницы в request.session
+            Если нет, увеличивает счетчик просмотров автомобиля на 1 и сохраняет изменения в базе данных.
+        """
+        if f'viewed_page_{car.id}' not in self.request.session:
+            self.request.session.setdefault(f'viewed_page_{car.id}', True)
+            car.view_count += 1
+            car.save()
 
 
 class ManufacturerDetailView(DetailView):
