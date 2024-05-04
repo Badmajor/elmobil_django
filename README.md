@@ -65,3 +65,5 @@ http://127.0.0.1:8777/
 Тестовый пользователь:
 - email: test@test.ru
 - pass: testpassword
+
+'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0ODA4NDgzLCJpYXQiOjE3MTQ4MDgxODMsImp0aSI6IjU4ZDc4Yzc4YzM1ODRhZjFiOTJhODlkZTliMGM2MGQxIiwidXNlcl9pZCI6Mn0.g1pdGhWytXSeiLhvFX5OKGnTylrAMIOWvx8y8zCFQIA'
