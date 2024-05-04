@@ -57,7 +57,8 @@ class CarDetailView(DetailView):
             ).order_by('-year_release'),
             pk=self.kwargs['pk']
         )
-        # car.increase_view_count() #  счетчик просмотров
+        car.view_count += 1
+        car.save()
         return car
 
 
