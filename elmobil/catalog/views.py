@@ -1,5 +1,4 @@
 from django.core.paginator import Paginator
-from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
@@ -18,7 +17,9 @@ class CarsListView(ListView):
         form = self.form_class(self.request.GET)
         if form.data:
             if form.is_valid():
-                cleaned_data = {key: value for key, value in form.cleaned_data.items() if value}
+                cleaned_data = {key: value
+                                for key, value in form.cleaned_data.items()
+                                if value}
                 return self._get_queryset(params=cleaned_data)
         return self._get_queryset()
 
@@ -84,9 +85,11 @@ class CarDetailView(DetailView):
         """
         Увеличивает счетчик просмотров для указанного автомобиля.
         Примечания:
-            Метод проверяет, была ли страница с автомобилем уже просмотрена в текущей сессии.
+            Метод проверяет, была ли страница с автомобилем уже
+            просмотрена в текущей сессии.
             Сохраняет просмотренные страницы в request.session
-            Если нет, увеличивает счетчик просмотров автомобиля на 1 и сохраняет изменения в базе данных.
+            Если нет, увеличивает счетчик просмотров автомобиля
+            на 1 и сохраняет изменения в базе данных.
         """
         if f'viewed_page_{car.id}' not in self.request.session:
             self.request.session.setdefault(f'viewed_page_{car.id}', True)
