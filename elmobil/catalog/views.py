@@ -1,8 +1,10 @@
 from django.core.paginator import Paginator
+from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from .constants import MAX_OBJ_ON_PAGE
+from .form import FilterForm
 from .models import Car, Manufacturer
 
 
@@ -10,20 +12,37 @@ class CarsListView(ListView):
     model = Car
     paginate_by = MAX_OBJ_ON_PAGE
     paginate_orphans = 5
-    ordering = 'title'
+    form_class = FilterForm
 
     def get_queryset(self):
-        return self.model.objects.select_related(
+        form = self.form_class(self.request.GET)
+        if form.data:
+            if form.is_valid():
+                cleaned_data = {key: value for key, value in form.cleaned_data.items() if value}
+                return self._get_queryset(params=cleaned_data)
+        return self._get_queryset()
+
+    def _get_queryset(self, params: dict = None):
+        queryset = self.model.objects.select_related(
             'manufacturer',
             'real_range_estimation',
             'performance__acceleration_to_100',
             'performance__drive',
+            'miscellaneous__car_body'
         ).prefetch_related(
-                'charging__port_location',
-                'charging_fast__port_location',
-                'images',
-                'video_youtube'
+            'charging__port_location',
+            'charging_fast__port_location',
+            'images',
+            'video_youtube'
         ).order_by('-year_release')
+        if params:
+            queryset = queryset.filter(**params)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class
+        return context
 
 
 class CarDetailView(DetailView):

@@ -1,0 +1,11 @@
+{% load django_bootstrap5 %}
+<div class="container mt-1 mb-3">
+  <form method="get" action="">
+    <div>{{ form.as_table }}</div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="submit" class="btn btn-primary me-md-2" >Применить</button>
+      <button class="btn btn-secondary" onclick="window.location.href={% url 'catalog:car_list' %}">Сбросить</button>
+    </div>
+  </form>
+</div>
+
