@@ -581,18 +581,9 @@ class Car(StrTitleMixin, models.Model):
         null=True,
         default=None,
         on_delete=models.SET_NULL,
-        related_name='preceding_model'
+        related_name='next_model'
     )
-
-    # next_car = models.ForeignKey(
-    #     'self',
-    #     verbose_name='Предыдущая модель',
-    #     null=True,
-    #     default=None,
-    #     on_delete=models.SET_NULL,
-    #     related_name='next_model'
-    # )
-
+    
     article = models.IntegerField(
         'артикул',
         null=False,
