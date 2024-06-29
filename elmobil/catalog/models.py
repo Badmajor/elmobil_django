@@ -606,10 +606,6 @@ class Car(StrTitleMixin, models.Model):
             self.slug = slugify(title)
         super().save()
 
-    @property
-    def next_car(self):
-        return Car.objects.filter(preceding_car=self).first()
-
     def increase_view_count(self):
         self.view_count += 1
         self.save()
