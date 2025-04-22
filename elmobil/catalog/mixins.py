@@ -17,13 +17,13 @@ class IterMixin:
         for field in self._meta.fields:
             name = field.verbose_name
             value = field.value_to_string(self)
-            if name == 'ID' or value == 'None':
+            if name == "ID" or value == "None":
                 continue
-            if value == 'True':
-                value = '✓'
-            elif value == 'False':
-                value = '✗'
+            if value == "True":
+                value = "✓"
+            elif value == "False":
+                value = "✗"
             if isinstance(field, models.ForeignKey):  # check ForeignKey
                 field_name = field.name
                 value = getattr(self, field_name)
-            yield f'{name}:   {value}   {None or field.help_text}'
+            yield f"{name}:   {value}   {None or field.help_text}"

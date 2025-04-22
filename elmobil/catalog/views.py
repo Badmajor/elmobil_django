@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 from django.views.generic import ListView, DetailView
 
 from .constants import MAX_OBJ_ON_PAGE
@@ -17,33 +18,43 @@ class CarsListView(ListView):
         form = self.form_class(self.request.GET)
         if form.data:
             if form.is_valid():
-                cleaned_data = {key: value
-                                for key, value in form.cleaned_data.items()
-                                if value}
+                cleaned_data = {
+                    key: value for key, value in form.cleaned_data.items() if value
+                }
                 return self._get_queryset(params=cleaned_data)
         return self._get_queryset()
 
     def _get_queryset(self, params: dict = None):
-        queryset = self.model.objects.select_related(
-            'manufacturer',
-            'real_range_estimation',
-            'performance__acceleration_to_100',
-            'performance__drive',
-            'miscellaneous__car_body'
-        ).prefetch_related(
-            'charging__port_location',
-            'charging_fast__port_location',
-            'images',
-            'video_youtube'
-        ).order_by('-year_release')
+        queryset = (
+            self.model.objects.select_related(
+                "manufacturer",
+                "real_range_estimation",
+                "performance__acceleration_to_100",
+                "performance__drive",
+                "miscellaneous__car_body",
+            )
+            .prefetch_related(
+                "charging__port_location",
+                "charging_fast__port_location",
+                "images",
+                "video_youtube",
+            )
+            .order_by("-year_release")
+        )
         if params:
             queryset = queryset.filter(**params)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class
+        context["form"] = self.form_class
         return context
+
+
+class CarDetailRedirectView(View):
+    def get(self, request, pk):
+        car = get_object_or_404(Car, pk=pk)
+        return redirect("catalog:car_detail", pk=car.pk, slug=car.slug, permanent=True)
 
 
 class CarDetailView(DetailView):
@@ -52,30 +63,32 @@ class CarDetailView(DetailView):
     def get_object(self, queryset=None):
         car = get_object_or_404(
             Car.objects.select_related(
-                'manufacturer',
-                'real_range_estimation',
-                'performance__acceleration_to_100',
-                'performance__drive',
-                'battery__battery_type',
-                'battery__architecture',
-                'battery__cathode',
-                'battery__pack_configuration',
-                'battery__nominal_voltage',
-                'charging__type_port',
-                'charging__type_electric',
-                'charging_fast__type_port',
-                'charging_fast__type_electric',
-                'miscellaneous__platform',
-                'miscellaneous__car_body',
-                'miscellaneous__segment',
-                'dimensions_weight',
-            ).prefetch_related(
-                'charging__port_location',
-                'charging_fast__port_location',
-                'images',
-                'video_youtube'
-            ).order_by('-year_release'),
-            pk=self.kwargs['pk']
+                "manufacturer",
+                "real_range_estimation",
+                "performance__acceleration_to_100",
+                "performance__drive",
+                "battery__battery_type",
+                "battery__architecture",
+                "battery__cathode",
+                "battery__pack_configuration",
+                "battery__nominal_voltage",
+                "charging__type_port",
+                "charging__type_electric",
+                "charging_fast__type_port",
+                "charging_fast__type_electric",
+                "miscellaneous__platform",
+                "miscellaneous__car_body",
+                "miscellaneous__segment",
+                "dimensions_weight",
+            )
+            .prefetch_related(
+                "charging__port_location",
+                "charging_fast__port_location",
+                "images",
+                "video_youtube",
+            )
+            .order_by("-year_release"),
+            pk=self.kwargs["pk"],
         )
         # Храним просмотренные страницы в сессии
         self._increment_view_count(car)
@@ -91,28 +104,30 @@ class CarDetailView(DetailView):
             Если нет, увеличивает счетчик просмотров автомобиля
             на 1 и сохраняет изменения в базе данных.
         """
-        if f'viewed_page_{car.id}' not in self.request.session:
-            self.request.session.setdefault(f'viewed_page_{car.id}', True)
+        if f"viewed_page_{car.id}" not in self.request.session:
+            self.request.session.setdefault(f"viewed_page_{car.id}", True)
             car.view_count += 1
             car.save()
 
 
 class ManufacturerDetailView(DetailView):
     model = Manufacturer
-    slug_field = 'title'
+    slug_field = "title"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # get cars this manufacturer
-        cars = Car.objects.select_related(
-            'manufacturer',
-            'performance',
-        ).filter(
-            manufacturer=self.object
-        ).order_by('-year_release')
+        cars = (
+            Car.objects.select_related(
+                "manufacturer",
+                "performance",
+            )
+            .filter(manufacturer=self.object)
+            .order_by("-year_release")
+        )
 
         paginator = Paginator(cars, MAX_OBJ_ON_PAGE)
-        page_number = self.request.GET.get('page')
+        page_number = self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)
-        context['page_obj'] = page_obj
+        context["page_obj"] = page_obj
         return context

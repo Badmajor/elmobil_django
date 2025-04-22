@@ -24,10 +24,12 @@ def _get_html_code(path_db):
 
 
 def _get_name_car(html_page):
-    soup = BeautifulSoup(html_page, 'html.parser')
-    img_main_fotorama = soup.find('div', class_='img-main fotorama')
-    img_list = img_main_fotorama.find_all('a', )
-    name = img_list[0].get('data-full').split('/')[-2]
+    soup = BeautifulSoup(html_page, "html.parser")
+    img_main_fotorama = soup.find("div", class_="img-main fotorama")
+    img_list = img_main_fotorama.find_all(
+        "a",
+    )
+    name = img_list[0].get("data-full").split("/")[-2]
     return name
 
 
@@ -35,7 +37,7 @@ def _get_images(name, path_to_images):
     images = []
     path_to_dir = os.path.join(path_to_images, name)
     for img in os.listdir(path_to_dir):
-        if img.endswith('.jpg'):
+        if img.endswith(".jpg"):
             path = os.path.join(path_to_dir, img)
             images.append(path)
     return images
@@ -54,26 +56,26 @@ def update_html_code(path_db, id_car):
 
 
 def normalize_name(path):
-    file_name = path.split('/')[-1]
-    return file_name.replace('.jpg', '')
+    file_name = path.split("/")[-1]
+    return file_name.replace(".jpg", "")
 
 
 class Command(BaseCommand):
-    help = 'add images'
+    help = "add images"
 
     def handle(self, *args, **options):
-        path_db = os.path.normpath(options['db_path'])
-        path_to_images = options['path_to_images']
+        path_db = os.path.normpath(options["db_path"])
+        path_to_images = options["path_to_images"]
         count = 0
         while data_db := _get_html_code(path_db):
             count += 1
             self.stdout.write(f'{data_db["id_car"]}/{count}')
             car_name = _get_name_car(data_db["code_page"])
-            article = data_db['id_car']
+            article = data_db["id_car"]
             car_obj = Car.objects.get(article=article)
             images = _get_images(car_name, path_to_images)
             for path in images:
-                with open(path, 'rb') as f:
+                with open(path, "rb") as f:
                     file = File(f)
                     obj, created = ImageCar.objects.get_or_create(
                         name=normalize_name(file.name)
@@ -92,12 +94,6 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'db_path',
-            type=str,
-            help='Path to the DB with table pages_code(SQLite)'
+            "db_path", type=str, help="Path to the DB with table pages_code(SQLite)"
         )
-        parser.add_argument(
-            'path_to_images',
-            type=str,
-            help='Path to folder with img'
-        )
+        parser.add_argument("path_to_images", type=str, help="Path to folder with img")
