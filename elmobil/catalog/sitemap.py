@@ -4,6 +4,7 @@ from .models import Car, Manufacturer
 
 
 class CarsSitemap(sitemaps.Sitemap):
+    protocol = "https"
     changefreq = "weekly"
     priority = 0.9
 
@@ -15,6 +16,7 @@ class CarsSitemap(sitemaps.Sitemap):
 
 
 class ManufacturersSitemap(sitemaps.Sitemap):
+    protocol = "https"
     changefreq = "weekly"
     priority = 0.9
 

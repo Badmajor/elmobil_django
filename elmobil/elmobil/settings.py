@@ -171,4 +171,5 @@ DJOSER = {
     'HIDE_USERS': True,
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
