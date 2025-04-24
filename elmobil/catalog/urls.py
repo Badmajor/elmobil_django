@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 from . import views
 
@@ -18,5 +19,11 @@ urlpatterns = [
         "catalog/manufacturer/<slug:slug>/",
         views.ManufacturerDetailView.as_view(),
         name="manufacturer",
+    ),
+    path(
+        "manufacturer/<str:manufacturer>/",
+        RedirectView.as_view(
+            url="/catalog/manufacturer/%(manufacturer)s/", permanent=True
+        ),
     ),
 ]
