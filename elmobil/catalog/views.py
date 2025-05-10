@@ -166,6 +166,7 @@ class ManufacturerDetailView(DetailView):
 
 class ManufacturerTitleRedirect(View):
     def get(self, request, title):
+        print('Yt pf[jle')
         params = request.GET.dict()
 
         redirect_url = reverse("catalog:manufacturer", kwargs={"slug": slugify(title)})
