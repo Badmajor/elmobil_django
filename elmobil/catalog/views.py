@@ -3,7 +3,9 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, Http404
 from django.views import View
 from django.views.generic import ListView, DetailView
+from django.urls import reverse
 from django.utils.text import slugify
+from urllib.parse import urlencode
 
 from .constants import MAX_OBJ_ON_PAGE
 from .form import FilterForm
@@ -127,7 +129,8 @@ class ManufacturerDetailView(DetailView):
                 Prefetch(
                     "images",
                     queryset=ImageCar.objects.only(
-                        "image", "name",
+                        "image",
+                        "name",
                     ),
                     to_attr="prefetched_images",
                 )
@@ -136,8 +139,8 @@ class ManufacturerDetailView(DetailView):
             .only(
                 "id",
                 "title",
-                'manufacturer__title',
-                'manufacturer__slug',
+                "manufacturer__title",
+                "manufacturer__slug",
                 "manufacturer__title",
                 "year_release",
                 "performance",
@@ -162,5 +165,11 @@ class ManufacturerDetailView(DetailView):
 
 class ManufacturerTitleRedirect(View):
     def get(self, request, title):
-        slug = slugify(title)
-        return redirect('catalog:manufacturer', slug=slug, permanent=True)
+        params = request.GET.dict()
+
+        redirect_url = reverse("manufacturer", kwargs={"slug": slugify(title)})
+
+        if params:
+            redirect_url += "?" + urlencode(params)
+
+        return redirect(redirect_url, permanent=True)
