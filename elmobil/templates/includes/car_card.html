@@ -6,19 +6,19 @@
       <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.title|slugify %}">{{ car.title }}</a></h5>
       <h6 class="card-subtitle mb-2 text-muted">
         <small>
-          Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer %}">{{ car.manufacturer }}</a>
+          Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer.slug %}">{{ car.manufacturer }}</a>
         </small>
       </h6>
       <div id="photo and performance" class="row">
       <div class="col-md-4" id="carousel">
         <div id="carouselexterier-{{car.pk }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            {% for img in car.images.all %}
+            {% for img in car.prefetched_images %}
               <button type="button" data-bs-target="#carouselexterier-{{car.pk }}" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %}aria-label="Slide {{ forloop.counter }}"></button>
             {% endfor %}
           </div>
           <div class="carousel-inner">
-              {% for img in car.images.all  %}
+              {% for img in car.prefetched_images  %}
                 <div class="carousel-item{% if forloop.first %} active{% endif %}">
                 <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.name }}">
                 </div>
