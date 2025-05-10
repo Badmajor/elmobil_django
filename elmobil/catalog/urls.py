@@ -16,10 +16,6 @@ urlpatterns = [
         "catalog/<int:pk>/", views.CarDetailRedirectView.as_view(), name="car_detail_pk"
     ),
     path(
-        "catalog/manufacturer/<str:title>/",
-        views.ManufacturerTitleRedirect.as_view(),
-    ),
-    path(
         "catalog/manufacturer/<slug:slug>/",
         views.ManufacturerDetailView.as_view(),
         name="manufacturer",

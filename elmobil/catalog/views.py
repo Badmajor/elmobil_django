@@ -161,12 +161,11 @@ class ManufacturerDetailView(DetailView):
         try:
             return Manufacturer.objects.get(slug=self.kwargs["slug"])
         except Manufacturer.DoesNotExist:
-            raise Http404("Производитель не найден")
+            return Manufacturer.objects.get(slug=slugify(self.kwargs["slug"]))
 
 
 class ManufacturerTitleRedirect(View):
     def get(self, request, title):
-        print('Yt pf[jle')
         params = request.GET.dict()
 
         redirect_url = reverse("catalog:manufacturer", kwargs={"slug": slugify(title)})
