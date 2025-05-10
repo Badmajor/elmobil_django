@@ -3,6 +3,7 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, Http404
 from django.views import View
 from django.views.generic import ListView, DetailView
+from django.utils.text import slugify
 
 from .constants import MAX_OBJ_ON_PAGE
 from .form import FilterForm
@@ -161,6 +162,5 @@ class ManufacturerDetailView(DetailView):
 
 class ManufacturerTitleRedirect(View):
     def get(self, request, title):
-        print(title)
-        manufacturer = get_object_or_404(Manufacturer, title__iexact=title)
-        return redirect('manufacturer_detail', slug=manufacturer.slug, permanent=True)
+        slug = slugify(title)
+        return redirect('manufacturer_detail', slug=slug, permanent=True)
