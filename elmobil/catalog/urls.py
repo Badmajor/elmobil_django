@@ -21,10 +21,8 @@ urlpatterns = [
         name="manufacturer",
     ),
     path(
-        "manufacturer/<str:manufacturer>/",
-        RedirectView.as_view(
-            url="/catalog/manufacturer/%(manufacturer)s/", permanent=True
-        ),
+        "manufacturer/<str:title>/",
+        views.ManufacturerTitleRedirect.as_view(),
     ),
     path(
         "catalog/manufacturer/<str:title>/",
