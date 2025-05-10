@@ -117,6 +117,7 @@ class CarDetailView(DetailView):
 class ManufacturerDetailView(DetailView):
     model = Manufacturer
     slug_field = "slug"
+    slug_url_kwarg = "slug"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -167,7 +168,7 @@ class ManufacturerTitleRedirect(View):
     def get(self, request, title):
         params = request.GET.dict()
 
-        redirect_url = reverse("manufacturer", kwargs={"slug": slugify(title)})
+        redirect_url = reverse("catalog:manufacturer", kwargs={"slug": slugify(title)})
 
         if params:
             redirect_url += "?" + urlencode(params)
