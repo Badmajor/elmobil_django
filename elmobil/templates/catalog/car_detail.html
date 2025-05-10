@@ -16,7 +16,7 @@
           <h1 class="h1-prod-name">{{ car.title }}</h1>
           <h4 class="h4">
             <small>
-               Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer %}">{{ car.manufacturer }}</a>
+               Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer.slug %}">{{ car.manufacturer }}</a>
             </small>
           </h4>
       </div>
