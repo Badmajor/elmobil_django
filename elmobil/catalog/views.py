@@ -163,4 +163,4 @@ class ManufacturerDetailView(DetailView):
 class ManufacturerTitleRedirect(View):
     def get(self, request, title):
         slug = slugify(title)
-        return redirect('manufacturer_detail', slug=slug, permanent=True)
+        return redirect('catalog:manufacturer', slug=slug, permanent=True)
