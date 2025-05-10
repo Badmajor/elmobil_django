@@ -22,3 +22,6 @@ class ManufacturersSitemap(sitemaps.Sitemap):
 
     def items(self):
         return Manufacturer.objects.order_by("title")
+
+    def location(self, manufacturer):
+        return reverse("catalog:manufacturer", kwargs={"slug": manufacturer.slug})

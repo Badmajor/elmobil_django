@@ -5,10 +5,10 @@
     {{ block.super }}  <!-- Сохраняем содержимое head из base.html -->
     {% if request.GET.page == "1" or not request.GET.page %}
     <!-- Для первой страницы указываем URL без параметра page -->
-    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}" />
+    <link rel="canonical" href="{% url 'catalog:manufacturer' slug=manufacturer.slug %}" />
   {% else %}
     <!-- Для остальных страниц — текущий URL -->
-    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}" />
+    <link rel="canonical" href="{% url 'catalog:manufacturer' slug=manufacturer.slug %}" />
   {% endif %}
 {% endblock %}
 {% block title %}

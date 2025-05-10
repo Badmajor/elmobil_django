@@ -38,14 +38,30 @@ class Manufacturer(StrTitleMixin, models.Model):
         null=True,
         default=None,
     )
+    slug = models.CharField(
+        max_length=256,
+        verbose_name="slug",
+        blank=True,
+        null=True,
+        unique=True,
+        default=None,
+    )
 
     class Meta:
         verbose_name = "производитель"
         verbose_name_plural = "Производители"
 
     def get_absolute_url(self):
-        slug = slugify(self.title)
+        if not self.slug:
+            slug = slugify(self.title)
+        else:
+            slug = self.slug
         return reverse("catalog:manufacturer", args=[slug])
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class BatteryType(StrTitleMixin, models.Model):

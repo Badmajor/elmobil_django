@@ -1,11 +1,12 @@
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, redirect
+from django.db.models import Prefetch
+from django.shortcuts import get_object_or_404, redirect, Http404
 from django.views import View
 from django.views.generic import ListView, DetailView
 
 from .constants import MAX_OBJ_ON_PAGE
 from .form import FilterForm
-from .models import Car, Manufacturer
+from .models import Car, ImageCar, Manufacturer
 
 
 class CarsListView(ListView):
@@ -112,22 +113,54 @@ class CarDetailView(DetailView):
 
 class ManufacturerDetailView(DetailView):
     model = Manufacturer
-    slug_field = "title"
+    slug_field = "slug"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # get cars this manufacturer
         cars = (
             Car.objects.select_related(
                 "manufacturer",
                 "performance",
             )
+            .prefetch_related(
+                Prefetch(
+                    "images",
+                    queryset=ImageCar.objects.only(
+                        "image", "name",
+                    ),
+                    to_attr="prefetched_images",
+                )
+            )
             .filter(manufacturer=self.object)
+            .only(
+                "id",
+                "title",
+                'manufacturer__title',
+                'manufacturer__slug',
+                "manufacturer__title",
+                "year_release",
+                "performance",
+            )
             .order_by("-year_release")
         )
-
         paginator = Paginator(cars, MAX_OBJ_ON_PAGE)
         page_number = self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)
+        if page_number and not page_obj.object_list:
+            raise Http404("Страница не найдена")
+
         context["page_obj"] = page_obj
         return context
+
+    def get_object(self, queryset=None):
+        try:
+            return Manufacturer.objects.get(slug=self.kwargs["slug"])
+        except Manufacturer.DoesNotExist:
+            raise Http404("Производитель не найден")
+
+
+class ManufacturerTitleRedirect(View):
+    def get(self, request, title):
+        print(title)
+        manufacturer = get_object_or_404(Manufacturer, title__iexact=title)
+        return redirect('manufacturer_detail', slug=manufacturer.slug, permanent=True)
