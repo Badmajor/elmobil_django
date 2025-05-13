@@ -8,7 +8,7 @@
     <link rel="canonical" href="{% url 'catalog:manufacturer' slug=manufacturer.slug %}" />
   {% else %}
     <!-- Для остальных страниц — текущий URL -->
-    <link rel="canonical" href="{% url 'catalog:manufacturer' slug=manufacturer.slug %}" />
+    <link rel="canonical" href="{% url 'catalog:manufacturer' slug=manufacturer.slug %}?page={{ request.GET.page }}" />
   {% endif %}
 {% endblock %}
 {% block title %}
