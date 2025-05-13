@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import ListView
 
 from catalog.models import Car
@@ -23,6 +24,7 @@ class BaseTopListView(ListView):
     title_page = None
     working_field = None
     measure = None
+    url_name = None
 
     def get_queryset(self):
         queryset = self.model.objects.select_related(
@@ -52,6 +54,9 @@ class BaseTopListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title_page'] = self.title_page
+        context['measure'] = self.measure
+        context['working_field'] = self.working_field
+        context['url_page'] = reverse(f'pages:{self.url_name}')
         return context
 
     def get_parent_field(self):
@@ -65,9 +70,10 @@ class TopRangeListView(BaseTopListView):
     working_field = 'performance__electric_range'
     title_page = 'Топ 100 Электромобилей по запасу хода'
     measure = 'км'
-
+    url_name = 'top_range_100'
 
 class TopChargeTimeListView(BaseTopListView):
     working_field = 'charging__charge_speed'
     title_page = 'Топ 100 Электромобилей по скорости зарядки'
     measure = 'км в час'
+    url_name = 'top_time_charge_100'
