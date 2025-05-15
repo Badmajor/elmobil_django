@@ -118,9 +118,7 @@ class CarDetailView(SeoMixin, DetailView):
     def get_meta_description(self):
         obj = self.get_object()
         return (
-            f"{obj.title} года. "
-            f"Запас хода: {obj.performance.electric_range} км, "
-            f"разгон до 100 км/ч: {obj.performance.acceleration_to_100} сек."
+            f"Подробные характеристики {obj.title} года. Производителя {obj.manufacturer} "
         )
 
 
