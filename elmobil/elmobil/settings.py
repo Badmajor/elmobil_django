@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
     'api.apps.ApiConfig',
+    'seo.apps.SeoConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',

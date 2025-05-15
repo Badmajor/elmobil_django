@@ -1,18 +1,20 @@
-from django.core.paginator import Paginator
-from django.db.models import Prefetch
-from django.shortcuts import get_object_or_404, redirect, Http404
-from django.views import View
-from django.views.generic import ListView, DetailView
-from django.urls import reverse
-from django.utils.text import slugify
 from urllib.parse import urlencode
 
-from .constants import MAX_OBJ_ON_PAGE
-from .form import FilterForm
-from .models import Car, ImageCar, Manufacturer
+from django.core.paginator import Paginator
+from django.db.models import Prefetch
+from django.shortcuts import Http404, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.text import slugify
+from django.views import View
+from django.views.generic import DetailView, ListView
+
+from catalog.constants import MAX_OBJ_ON_PAGE
+from catalog.form import FilterForm
+from catalog.models import Car, ImageCar, Manufacturer
+from seo.mixins import SeoMixin
 
 
-class CarsListView(ListView):
+class CarsListView(SeoMixin, ListView):
     model = Car
     paginate_by = MAX_OBJ_ON_PAGE
     paginate_orphans = 5
@@ -61,7 +63,7 @@ class CarDetailRedirectView(View):
         return redirect("catalog:car_detail", pk=car.pk, slug=car.slug, permanent=True)
 
 
-class CarDetailView(DetailView):
+class CarDetailView(SeoMixin, DetailView):
     model = Car
 
     def get_object(self, queryset=None):
@@ -113,8 +115,14 @@ class CarDetailView(DetailView):
             car.view_count += 1
             car.save()
 
+    def get_meta_description(self):
+        obj = self.get_object()
+        return (
+            f"Подробные характеристики {obj.title} года. Производителя {obj.manufacturer} "
+        )
 
-class ManufacturerDetailView(DetailView):
+
+class ManufacturerDetailView(SeoMixin, DetailView):
     model = Manufacturer
     slug_field = "slug"
     slug_url_kwarg = "slug"
@@ -162,6 +170,10 @@ class ManufacturerDetailView(DetailView):
             return Manufacturer.objects.get(slug=self.kwargs["slug"])
         except Manufacturer.DoesNotExist:
             return Manufacturer.objects.get(slug=slugify(self.kwargs["slug"]))
+
+    def get_meta_description(self):
+        obj = self.get_object()
+        return f"{obj.title} - полный каталог электромобилей . Технические характеристики модельного ряда {obj.title}"
 
 
 class ManufacturerTitleRedirect(View):
