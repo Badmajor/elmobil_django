@@ -3,7 +3,7 @@
 <div class="col d-flex justify-content-center">
   <div class="card" style="width: 60rem;">
     <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.title|slugify %}">{{ car.title }}</a></h5>
+      <h5 class="card-title"><a href="{% url 'catalog:car_detail' car.id car.slug %}">{{ car.title }}</a></h5>
       <h6 class="card-subtitle mb-2 text-muted">
         <small>
           Производитель: <a href="{% url 'catalog:manufacturer' car.manufacturer.slug %}">{{ car.manufacturer }}</a>
