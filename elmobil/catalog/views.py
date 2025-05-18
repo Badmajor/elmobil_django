@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import Http404, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.text import slugify
@@ -35,6 +35,8 @@ class CarsListView(SeoMixin, ListView):
             self.model.objects.select_related(
                 "manufacturer",
                 "performance",
+                "performance__drive",
+                "performance__acceleration_to_100",
             )
             .prefetch_related(
                 Prefetch(
@@ -117,7 +119,7 @@ class CarDetailView(SeoMixin, DetailView):
             car.save()
 
     def get_meta_description(self):
-        obj = self.get_object()
+        obj = self.object
         return f"Подробные характеристики {obj.title} года. Производителя {obj.manufacturer} "
 
 
@@ -132,6 +134,8 @@ class ManufacturerDetailView(SeoMixin, DetailView):
             Car.objects.select_related(
                 "manufacturer",
                 "performance",
+                "performance__drive",
+                "performance__acceleration_to_100",
             )
             .prefetch_related(
                 Prefetch(
@@ -165,13 +169,11 @@ class ManufacturerDetailView(SeoMixin, DetailView):
         return context
 
     def get_object(self, queryset=None):
-        try:
-            return Manufacturer.objects.get(slug=self.kwargs["slug"])
-        except Manufacturer.DoesNotExist:
-            return Manufacturer.objects.get(slug=slugify(self.kwargs["slug"]))
+        slug = self.kwargs["slug"]
+        return get_object_or_404(Manufacturer, Q(slug=slug) | Q(slug=slugify(slug)))
 
     def get_meta_description(self):
-        obj = self.get_object()
+        obj = self.object
         return f"{obj.title} - полный каталог электромобилей . Технические характеристики модельного ряда {obj.title}"
 
 
