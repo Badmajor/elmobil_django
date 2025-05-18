@@ -34,16 +34,17 @@ class CarsListView(SeoMixin, ListView):
         queryset = (
             self.model.objects.select_related(
                 "manufacturer",
-                "real_range_estimation",
-                "performance__acceleration_to_100",
-                "performance__drive",
-                "miscellaneous__car_body",
+                "performance",
             )
             .prefetch_related(
-                "charging__port_location",
-                "charging_fast__port_location",
-                "images",
-                "video_youtube",
+                Prefetch(
+                    "images",
+                    queryset=ImageCar.objects.only(
+                        "image",
+                        "name",
+                    ),
+                    to_attr="prefetched_images",
+                )
             )
             .order_by("-year_release")
         )
@@ -117,9 +118,7 @@ class CarDetailView(SeoMixin, DetailView):
 
     def get_meta_description(self):
         obj = self.get_object()
-        return (
-            f"Подробные характеристики {obj.title} года. Производителя {obj.manufacturer} "
-        )
+        return f"Подробные характеристики {obj.title} года. Производителя {obj.manufacturer} "
 
 
 class ManufacturerDetailView(SeoMixin, DetailView):
