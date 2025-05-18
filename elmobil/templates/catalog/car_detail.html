@@ -79,15 +79,7 @@
         {% endif %}
         <br>
         <br>
-        <div>
-          {% if car.next_model.first.id %}
-          Следующая модель:exit <a href="{% url 'catalog:car_detail_pk' car.next_model.first.id %}">{{ car.next_model.first }}</a>
-        {% endif %}
-        <br>
-        {% if car.preceding_car %}
-          Предыдущая модель: <a href="{% url 'catalog:car_detail_pk' car.preceding_car.id %}">{{ car.preceding_car }}</a>
-        {% endif %}
-        </div>
+
 
       </div>
       {% if car.real_range_estimation %}
@@ -118,6 +110,15 @@
         {% include "includes/table.html" with data=car.miscellaneous %}
       </div>
     {% endif %}
+    </div>
+    <div>
+          {% if car.next_model.first.id %}
+          Следующая модель:exit <a href="{% url 'catalog:car_detail_pk' car.next_model.first.id %}">{{ car.next_model.first }}</a>
+        {% endif %}
+        <br>
+        {% if car.preceding_car %}
+          Предыдущая модель: <a href="{% url 'catalog:car_detail_pk' car.preceding_car.id %}">{{ car.preceding_car }}</a>
+        {% endif %}
     </div>
     <div class="text-muted small">
     Просмотры: {{ car.view_count }}
