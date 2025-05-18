@@ -72,6 +72,8 @@ jobs:
           # которые нужно выполнить на сервере,
           # с которым установлено соединение
           script: |
+            # чистим docker от мусора
+            docker system prune -f
             cd /home/webmaster/elmobil/infra/
             # Выполняет pull образов с Docker Hub
             docker compose -f docker-compose.production.yml pull
