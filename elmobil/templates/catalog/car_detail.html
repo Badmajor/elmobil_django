@@ -113,7 +113,7 @@
     </div>
     <div>
           {% if car.next_model.first.id %}
-          Следующая модель:exit <a href="{% url 'catalog:car_detail_pk' car.next_model.first.id %}">{{ car.next_model.first }}</a>
+          Следующая модель: <a href="{% url 'catalog:car_detail_pk' car.next_model.first.id %}">{{ car.next_model.first }}</a>
         {% endif %}
         <br>
         {% if car.preceding_car %}
