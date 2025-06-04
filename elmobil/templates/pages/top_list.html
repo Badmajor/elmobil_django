@@ -2,15 +2,16 @@
 {% load django_bootstrap5 %}
 {% block head %}
     {{ block.super }}
-    {% block title %}
-      {{ title_page }}
-    {% endblock %}
     {% if request.GET.page == "1" or not request.GET.page %}
     <link rel="canonical" href="{{ url_page }}" />
-  {% else %}
+    {% else %}
     <link rel="canonical" href="{{ url_page }}?page={{ request.GET.page }}" />
-  {% endif %}
+    {% endif %}
 {% endblock %}
+{% block title %}
+    {{ title_page }}
+{% endblock %}
+
 {% block content %}
   <h1>{{ title_page }}</h1>
   <br>
