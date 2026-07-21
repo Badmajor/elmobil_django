@@ -174,3 +174,8 @@ DJOSER = {
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://elmobil.ru",
+    "https://www.elmobil.ru",
+]

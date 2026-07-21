@@ -2,8 +2,7 @@
 {% load django_bootstrap5 %}
 {% block head %}
     {{ block.super }}  <!-- Сохраняем содержимое head из base.html -->
-    <link rel="canonical"
-      href="{{ request.scheme }}://{{ request.get_host }}{% url 'pages:charge_cost' %}">
+    <link rel="canonical" href="{% url 'pages:charge_cost' %}" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
