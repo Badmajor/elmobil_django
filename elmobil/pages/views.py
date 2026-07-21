@@ -1,6 +1,7 @@
 from django.db import models
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView
 
 from catalog.models import Car
@@ -76,3 +77,37 @@ class TopChargeTimeListView(BaseTopListView):
     measure = "км в час"
     url_name = "top_time_charge_100"
     meta_description = "Рейтинг электромобилей по скорости зарядки. Сравнение 100 лучших моделей с максимальной скоростью зарядки."
+
+
+def charge_cost(request):
+    template = "pages/charge_cost.html"
+    context = dict(
+        SITE_NAME="elmobil.ru",
+        TITLE="Калькулятор стоимости зарядки электромобиля | Рассчитать цену зарядки онлайн",
+        meta_description=(
+        "Рассчитайте стоимость зарядки электромобиля до 80% и 100%. "
+        "Бесплатный онлайн-калькулятор по стоимости электроэнергии и емкости батареи."
+        )
+    )
+
+    if request.method == "POST":
+        price = float(request.POST.get("price", 0))
+        battery = float(request.POST.get("battery", 0))
+        current_charge = float(request.POST.get("current_charge", 0))
+
+        cost_80 = battery * ((80 - current_charge) / 100) * price
+        cost_100 = battery * ((100 - current_charge) / 100) * price
+
+        context.update(
+            {
+                "price": price,
+                "battery": battery,
+                "cost_80": round(cost_80, 2),
+                "cost_100": round(cost_100, 2),
+                }
+                )
+
+    return render(request, template, context)
+
+def charge_cost_redirect(request):
+    return redirect("pages:charge_cost")

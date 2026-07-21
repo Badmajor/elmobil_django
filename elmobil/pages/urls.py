@@ -16,5 +16,8 @@ urlpatterns = [
         views.TopChargeTimeListView.as_view(),
         name='top_time_charge_100'
     ),
-
+    path('charge_cost/', views.charge_cost, name='charge_cost'),
+    path(
+        "сколько-стоит-зарядить-электромобил/", views.charge_cost, name="charge_cost_redirect"
+    ),
 ]
