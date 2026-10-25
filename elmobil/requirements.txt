@@ -12,7 +12,7 @@ django-extensions==3.2.3
 django-taggit==6.1.0
 django-templated-mail==1.1.1
 djangorestframework==3.18.2
-djangorestframework-simplejwt==5.3.1
+djangorestframework-simplejwt==5.5.1
 djoser==2.3.0
 drf-yasg==1.21.7
 flake8==5.0.4
@@ -38,7 +38,7 @@ requests==2.34.0
 requests-oauthlib==2.0.0
 setuptools<81
 social-auth-app-django==5.6.0
-social-auth-core==5.0.2
+social-auth-core==4.4
 soupsieve==2.9.0
 sqlparse==0.6.0
 typing_extensions==4.10.0
