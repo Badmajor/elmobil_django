@@ -1,8 +1,8 @@
-FROM python:3.10
+FROM python:3.12
 
 WORKDIR /elmobil
 
-RUN pip install gunicorn==21.2.0
+RUN pip install gunicorn==23.0.0
 
 COPY requirements.txt .
 
