@@ -9,7 +9,7 @@ Django==5.2.17
 django-bootstrap5==22.2
 django-debug-toolbar==4.2.0
 django-extensions==3.2.3
-django-taggit==4.0.0
+django-taggit==6.1.0
 django-templated-mail==1.1.1
 djangorestframework==3.18.2
 djangorestframework-simplejwt==5.3.1
@@ -36,6 +36,7 @@ pytz==2024.1
 PyYAML==6.0.1
 requests==2.34.0
 requests-oauthlib==2.0.0
+setuptools<81
 social-auth-app-django==5.4.0
 social-auth-core==5.0.2
 soupsieve==2.9.0
