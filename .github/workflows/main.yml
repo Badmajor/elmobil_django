@@ -52,7 +52,26 @@ jobs:
           echo "Checking SSH host keys for ${SSH_HOST}:${SSH_PORT}"
           ssh-keyscan -p "$SSH_PORT" -t ed25519,ecdsa,rsa "$SSH_HOST" 2>/dev/null \
             | ssh-keygen -lf - -E sha256
-            
+
+      - name: Verify SSH fingerprint
+        env:
+          SSH_HOST: ${{ secrets.HOST }}
+          SSH_PORT: ${{ secrets.PORT }}
+          EXPECTED_FINGERPRINT: ${{ secrets.SSH_FINGERPRINT }}
+        run: |
+          ACTUAL_FINGERPRINT=$(
+            ssh-keyscan -p "$SSH_PORT" -t ed25519 "$SSH_HOST" 2>/dev/null |
+            ssh-keygen -lf - -E sha256 |
+            awk '{print $2}'
+          )
+
+          if [ "$ACTUAL_FINGERPRINT" = "$EXPECTED_FINGERPRINT" ]; then
+            echo "ED25519 fingerprint matches"
+          else
+            echo "ED25519 fingerprint mismatch"
+            exit 1
+          fi
+
       - name: Copy deployment configuration
         uses: appleboy/scp-action@v0.1.7
         with:
