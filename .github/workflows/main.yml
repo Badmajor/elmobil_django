@@ -44,15 +44,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Debug SSH host fingerprints
-        env:
-          SSH_HOST: ${{ secrets.HOST }}
-          SSH_PORT: ${{ secrets.PORT }}
-        run: |
-          echo "Checking SSH host keys for ${SSH_HOST}:${SSH_PORT}"
-          ssh-keyscan -p "$SSH_PORT" -t ed25519,ecdsa,rsa "$SSH_HOST" 2>/dev/null \
-            | ssh-keygen -lf - -E sha256
-
       - name: Copy deployment configuration
         uses: appleboy/scp-action@v1
         with:
@@ -63,6 +54,7 @@ jobs:
           source: "infra/docker-compose.production.yml,infra/nginx.conf"
           target: "/home/deploy/elmobil"
           fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          overwrite: true
 
       - name: Deploy application
         uses: appleboy/ssh-action@v1.2.0
